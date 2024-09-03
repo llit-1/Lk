@@ -1,0 +1,51 @@
+header {
+    height: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: #DDDDDD 1px solid;
+}
+
+img {
+    width: 330px;
+}
+
+.formAutorization {
+    height: 75%;
+    width: 100%;
+    background-color: #F5F5F5;
+    padding: 20px;
+}
+
+.formAutorization > form {
+    padding-top: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    justify-content: center;
+}
+
+.textInput {
+    width: 100%;
+    max-width: 400px;
+}
+
+.buttonInput {
+    width: 100%;
+    max-width: 400px;
+}
+
+p {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    color: #6d6d6d;
+    padding-top: 30px;
+    font-family: "Roboto";
+    font-size: 12px;
+}
+
+header > p {
+    cursor: pointer;
+}

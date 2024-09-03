@@ -35,6 +35,19 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero
     };
 });
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
+
 builder.Services.AddAuthorization();
 
 builder.Services.AddDbContext< lk.Server.DbContexts.RKNETDB.RKNETDBContext>(options =>
@@ -51,6 +64,7 @@ builder.Services.AddDbContext< lk.Server.DbContexts.RKNETDB.RKNETDBContext>(opti
 
 var app = builder.Build();
 
+app.UseCors("AllowAllOrigins");
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
