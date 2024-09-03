@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, TextField, CircularProgress } from "@mui/material";
 import "./Login.css"
 import PhoneNumberInput from "../../Components/InputPhone";
@@ -19,13 +19,10 @@ function FormLogin({ onSwitchForm }: { onSwitchForm: (x : number) => void }) {
 
     //const dispatch = useAppDispatch();
 
+    useEffect(() => setIsLoading(prev => !prev), [text])
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        const phoneCorrect = phone.replace(/\D/g, '').substring(1)
-        console.log(phone.replace(/\D/g, '').substring(1))
-        console.log(password)
-        setIsLoading(prev => !prev)
         setText("")
 
         try {
@@ -38,10 +35,9 @@ function FormLogin({ onSwitchForm }: { onSwitchForm: (x : number) => void }) {
             setIsAuth(true);
 
         } catch (error) {
-            console.error("Ошибка при авторизации:", error);
+            console.error("РћС€РёР±РєР°:", error);
         } finally {
-            setIsLoading(false);
-            setText("Войти");
+            setText("Р’РѕР№С‚Рё");
         }
         
         //dispatch(login({ phone, password }));
