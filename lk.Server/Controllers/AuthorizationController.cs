@@ -3,6 +3,7 @@ using lk.Server.DbContexts.RKNETDB.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -19,6 +20,7 @@ namespace lk.Server.Controllers
         {
             _rKNETDBContext = rKNETDBContext;
         }
+
 
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginModel loginModel)
@@ -49,22 +51,102 @@ namespace lk.Server.Controllers
         {
             string password = loginModel.Password;
             string phone = loginModel.Phone;
+            string code = loginModel.Code;
             if (password == null || phone == null)
             {
                 return BadRequest("Password or Phone is null");
             }
-
-            var use = _rKNETDBContext.Personalities.FirstOrDefault();
-
             Personality user = _rKNETDBContext.Personalities.FirstOrDefault(c => c.Phone == phone);
             if (user == null)
             {
                 return BadRequest("User not Found");
             }
+
+            if (user.PhoneCode != code)
+            {
+                return BadRequest("invalid code");
+            }
             user.Password = Global.Encrypt(password);
             _rKNETDBContext.SaveChanges();
-            use = new Personality();
             return Ok("Password set successfully");
+        }
+
+        [HttpPatch("set-phone-code")]
+        public async Task<IActionResult> SetPhoneCode(string phone)
+        {
+            if (string.IsNullOrEmpty(phone))
+            {
+                return BadRequest("Phone is empty");
+            }
+            Personality user = _rKNETDBContext.Personalities.FirstOrDefault();
+            user = _rKNETDBContext.Personalities.FirstOrDefault(c => c.Phone == phone);
+            if (user == null)
+            {
+                return BadRequest("No phone in DB");
+            }
+            if (user.LastPhoneCall == null)
+            {
+                user.LastPhoneCall = DateTime.Now;
+            }
+            if (user.PhoneCallAttempts == null)
+            {
+                user.PhoneCallAttempts = 0;
+            }
+            if (user.LastPhoneCall.Value.Date == DateTime.Now.Date && user.PhoneCallAttempts > 3)
+            {
+                return BadRequest("Attempts are over");
+            }
+            PhoneModel phoneModel = new();
+            using (HttpClient client = new HttpClient())
+            {
+
+                try
+                {
+                    string Url = "https://sms.ru/code/call?phone=7" + phone + "&ip=-1&api_id=990DA73E-E2DA-6964-7933-7AF52DB2696D";
+                    HttpResponseMessage response = await client.GetAsync(Url);
+                    response.EnsureSuccessStatusCode();
+                    string json = await response.Content.ReadAsStringAsync();
+                    phoneModel = JsonConvert.DeserializeObject<PhoneModel>(json);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex);
+                }
+            }
+            if (phoneModel.status.ToLower() != "ok")
+            {
+                return BadRequest(phoneModel.status);
+            }
+            if (user.PhoneCallAttempts > 3)
+            {
+                user.PhoneCallAttempts = 0;
+            }
+            user.PhoneCallAttempts++;
+            user.LastPhoneCall = DateTime.Now;
+            user.PhoneCode = phoneModel.code;
+            _rKNETDBContext.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPost("chek-phone-code")]
+        public IActionResult CheckPhoneCode([FromBody] LoginModel loginModel)
+        {
+            string code = loginModel.Code;
+            string phone = loginModel.Phone;
+            if (code == null || phone == null)
+            {
+                return BadRequest("Code or Phone is null");
+            }
+            Personality user = _rKNETDBContext.Personalities.FirstOrDefault(c => c.Phone == phone);
+            if (user == null)
+            {
+                return BadRequest("User not Found");
+            }
+            if (code != user.PhoneCode)
+            {
+                return BadRequest("invalid code");
+            }
+            return Ok(code);
         }
 
         private string GetToken(string name)
@@ -89,7 +171,20 @@ namespace lk.Server.Controllers
         {
             public string Phone { get; set; }
             public string Password { get; set; }
+            public string Code { get; set; }
 
         }
+
+        public class PhoneModel
+        {
+            public string status { get; set; }
+            public string code { get; set; }
+            public string call_id { get; set; }
+            public decimal money { get; set; }
+            public decimal balance { get; set; }
+        }
+
+
+
     }
 }
