@@ -1,26 +1,17 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "../src/Pages/Login/Login";
-import MainPage from "./Pages/MainPage/MainPage";
-import { useState, useEffect } from "react";
+import MainPage from "./Pages/MainPage/MainPage.tsx";
 
 function App() {
-    const storedToken = localStorage.getItem("authToken");
+    //const storedToken = localStorage.getItem("authToken");
+
 
     return (
-        <>
-            <Routes>
-                {!storedToken ? (
+        <Routes>
                     <Route path="/" element={<Navigate to="/Login" />} />
-                ) : (
-                    <Route path="/" element={<Navigate to="/MainPage" />} />
-                )}
-
-                <Route path="/Login" element={<Login />} />
-                <Route path="/MainPage" element={<MainPage />} />
-
-                <Route path="*" element={<Navigate to="/Login" />} />
-            </Routes>
-        </>
+                    <Route path="/Login" element={<Login />} />
+                    <Route path="/MainPage" element={<MainPage/>} />
+        </Routes>
     );
 }
 

@@ -1,50 +1,38 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+// src/store/authSlice.ts
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface AuthState {
-    token: string | null;
-    loading: boolean;
-    error: string | null;
+  token: string | null;
+  phone: string | null;
+  code: string | null;
 }
 
 const initialState: AuthState = {
-    token: null,
-    loading: false,
-    error: null,
+  token: null,
+  phone: '',
+  code: null,
 };
 
-export const login = createAsyncThunk(
-    'auth/login',
-    async (credentials: { phone: string; password: string }) => {
-        const response = await axios.post('https://localhost:7085/api/auth/login', credentials);
-        return response.data.token;
-    }
-);
-
 const authSlice = createSlice({
-    name: 'auth',
-    initialState,
-    reducers: {
-        logout: (state) => {
-            state.token = null;
-        }
+  name: 'auth',
+  initialState,
+  reducers: {
+    login: (state, action: PayloadAction<{ token: string | null, phone: string | null, code: string | null }>) => {
+      console.log(action.payload)
+      state.token = action.payload.token;
+      state.phone = action.payload.phone;
+      state.code = action.payload.code;
+      localStorage.setItem('authToken', action.payload.token); // Сохраняем токен в localStorage
     },
-    extraReducers: (builder) => {
-        builder
-            .addCase(login.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-            })
-            .addCase(login.fulfilled, (state, action) => {
-                state.loading = false;
-                state.token = action.payload;
-            })
-            .addCase(login.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.error.message || 'Login failed';
-            });
+    logout: (state) => {
+      state.token = null;
+      state.phone = '';
+      state.code = false;
+      localStorage.removeItem('authToken'); // Удаляем токен из localStorage
     },
+  },
 });
 
-export const { logout } = authSlice.actions;
+export const { login, logout } = authSlice.actions;
+
 export default authSlice.reducer;

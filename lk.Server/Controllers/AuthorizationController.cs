@@ -128,7 +128,7 @@ namespace lk.Server.Controllers
             return Ok();
         }
 
-        [HttpPost("chek-phone-code")]
+        [HttpPost("check-phone-code")]
         public IActionResult CheckPhoneCode([FromBody] LoginModel loginModel)
         {
             string code = loginModel.Code;
