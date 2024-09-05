@@ -1,9 +1,6 @@
-import React, { useState } from 'react';
-import { AppBar, Toolbar, IconButton, Typography, Menu, Paper, Button, Box , Avatar} from '@mui/material';
-import { orange } from '@mui/material/colors';
+import { AppBar, Toolbar, Paper, Button, Box , Avatar} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
-import Stack from '@mui/material/Stack';
 
 function MainPage () {
 

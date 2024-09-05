@@ -17,7 +17,7 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login: (state, action: PayloadAction<{ token: string | null, phone: string | null, code: string | null }>) => {
+    login: (state, action: PayloadAction<{ token: string, phone: string | null, code: string | null }>) => {
       console.log(action.payload)
       state.token = action.payload.token;
       state.phone = action.payload.phone;
@@ -27,7 +27,7 @@ const authSlice = createSlice({
     logout: (state) => {
       state.token = null;
       state.phone = '';
-      state.code = false;
+      state.code = null;
       localStorage.removeItem('authToken'); // Удаляем токен из localStorage
     },
   },

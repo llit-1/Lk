@@ -2,30 +2,24 @@ import React, { useState } from 'react';
 import { Button, TextField, CircularProgress } from "@mui/material";
 import "./Login.css";
 import PhoneNumberInput from "../../Components/InputPhone";
-import SnackBarCustom from "../../Components/SnackBarCustom";
 import axios from 'axios';
-import { Navigate } from 'react-router-dom'; // Импортируйте useNavigate
+import { Navigate } from 'react-router-dom';
+import { useAppDispatch } from '../../hooks/hook';
+import { showNotification } from '../../store/notificationSlice';
 
 interface FormLoginProps {
   onSwitchForm: (index: number) => void;
 }
 
 const FormLogin: React.FC<FormLoginProps> = ({ onSwitchForm }) => {
+  localStorage.removeItem('authToken');
+  const dispatch = useAppDispatch();
   const [password, setPassword] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [buttonText, setButtonText] = useState<string>("Войти");
-  const [snackbarProps, setSnackbarProps] = useState<{ isOpen: boolean, isGood: boolean, message: string }>({
-    isOpen: false,
-    isGood: false,
-    message: ''
-  });
-  const [isAuth, setIsAuth] = useState<boolean>(false)
+  const [isAuth, setIsAuth] = useState<boolean>(false);
   
-  const handleCloseSnackbar = () => {
-    setSnackbarProps(prevState => ({ ...prevState, isOpen: false }));
-  };
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setButtonText("");
@@ -39,31 +33,27 @@ const FormLogin: React.FC<FormLoginProps> = ({ onSwitchForm }) => {
       });
 
       if (response.status === 200) {
-        setSnackbarProps({ isOpen: true, isGood: true, message: 'Вы успешно авторизовались!' });
+        dispatch(showNotification({ isGood: true, message: 'Вы успешно авторизовались!' }));
         localStorage.setItem("authToken", response.data);
-        setIsAuth(prev => !prev)
+        setIsAuth(true);
       } else {
-        setSnackbarProps({ isOpen: true, isGood: false, message: 'Неправильный номер телефона или пароль' });
+        dispatch(showNotification({ isGood: false, message: 'Неправильный номер телефона или пароль!' }));
       }
     } catch {
-      setSnackbarProps({ isOpen: true, isGood: false, message: 'Ошибка при отправке данных' });
+      dispatch(showNotification({ isGood: false, message: 'Ошибка при отправке данных!' }));
     } finally {
       setButtonText("Войти");
       setIsLoading(false);
     }
   };
 
-  if(isAuth)
-  {
-    return <Navigate to="/MainPage" replace={true}/>
+  if (isAuth) {
+    return <Navigate to="/MainPage" replace={true} />;
   }
 
   return (
     <form onSubmit={handleLogin}>
-      <PhoneNumberInput
-        value={phone}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhone(e.target.value)}
-      />
+      <PhoneNumberInput value={phone} onChange={(e) => setPhone(e.target.value)} />
       <TextField
         required
         className="textInput"
@@ -107,13 +97,6 @@ const FormLogin: React.FC<FormLoginProps> = ({ onSwitchForm }) => {
       >
         Зарегистрироваться / Забыли пароль?
       </Button>
-
-      <SnackBarCustom
-        isOpen={snackbarProps.isOpen}
-        isGood={snackbarProps.isGood}
-        message={snackbarProps.message}
-        onClose={handleCloseSnackbar}
-      />
     </form>
   );
 }

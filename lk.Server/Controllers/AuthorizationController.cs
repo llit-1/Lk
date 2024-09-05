@@ -76,13 +76,13 @@ namespace lk.Server.Controllers
         {
             if (string.IsNullOrEmpty(phone))
             {
-                return BadRequest("Phone is empty");
+                return BadRequest(new { message = "Phone is empty" });
             }
             Personality user = _rKNETDBContext.Personalities.FirstOrDefault();
             user = _rKNETDBContext.Personalities.FirstOrDefault(c => c.Phone == phone);
             if (user == null)
             {
-                return BadRequest("No phone in DB");
+                return BadRequest(new { message = "No phone in DB" });
             }
             if (user.LastPhoneCall == null)
             {
@@ -94,7 +94,7 @@ namespace lk.Server.Controllers
             }
             if (user.LastPhoneCall.Value.Date == DateTime.Now.Date && user.PhoneCallAttempts > 3)
             {
-                return BadRequest("Attempts are over");
+                return BadRequest(new { message = "Attempts are over" });
             }
             PhoneModel phoneModel = new();
             using (HttpClient client = new HttpClient())
