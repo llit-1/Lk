@@ -34,7 +34,7 @@ const GetPassword: React.FC<GetPasswordProps> = ({ onSwitchForm }) => {
 
     try {
 
-      const response = await axios.post("https://localhost:7026/api/Authorization/set-password", {
+        const response = await axios.post("https://localhost:44300/api/Authorization/set-password", {
         Phone: phone,
         Password: password,
         Code: code
@@ -42,7 +42,7 @@ const GetPassword: React.FC<GetPasswordProps> = ({ onSwitchForm }) => {
 
       if(response.status === 200)
       {
-        const response = await axios.post("https://localhost:7026/api/Authorization/login", {
+          const response = await axios.post("https://localhost:44300/api/Authorization/login", {
           Phone: phone,
           Password: password,
           Code: code

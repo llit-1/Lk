@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Button, CircularProgress } from "@mui/material";
 import OTPInput from '../../Components/OTP';
 import {useAppSelector, useAppDispatch} from "../../hooks/hook"
-import SnackBarCustom from "../../Components/SnackBarCustom";
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { login } from '../../store/authSlice';
+import { showNotification } from '../../store/notificationSlice';
 
 interface GetCodeProps {
   onSwitchForm: (x: number) => void;
@@ -15,9 +15,8 @@ const GetCode: React.FC<GetCodeProps> = ({ onSwitchForm, setGetCodeRequest}) => 
   const [buttonText, setButtonText] = useState<string>("Подтвердить");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [buttonBlocked, setButtonBlocked] = useState<boolean>(true);
-  const [codeFromSMS, setCodeFromSMS] = useState<string>('');  // Храним OTP как строку
+  const [codeFromSMS, setCodeFromSMS] = useState<string>('');
   const phone = useAppSelector((state) => state.auth.phone);
-  const [snackbarProps, setSnackbarProps] = useState<{ isOpen: boolean, isGood: boolean, message: string }>({ isOpen: false, isGood: false, message: '' });
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -33,7 +32,7 @@ const GetCode: React.FC<GetCodeProps> = ({ onSwitchForm, setGetCodeRequest}) => 
     setIsLoading(prev => !prev)
     
     try {
-      const response = await axios.post("https://localhost:7026/api/Authorization/check-phone-code", {
+        const response = await axios.post("https://localhost:44300/api/Authorization/check-phone-code", {
         Phone: phone,
         Password: "",
         Code: codeFromSMS
@@ -42,17 +41,16 @@ const GetCode: React.FC<GetCodeProps> = ({ onSwitchForm, setGetCodeRequest}) => 
       if(response.status === 200)
       {
         dispatch(login({ token: "", phone: phone, code: codeFromSMS }));
-        setSnackbarProps({ isOpen: true, isGood: true, message: 'Код принят' });
-        setGetCodeRequest(2)
+        dispatch(showNotification({ isGood: true, message: 'Код принят' }));
+        return setGetCodeRequest(2)
       } else {
-        setSnackbarProps({ isOpen: true, isGood: false, message: 'Код неверный!' });
+        return dispatch(showNotification({ isGood: false, message: 'Код неверный!' }));
       }
       
 
-    } catch (error) {
-      console.error("Ошибка:", error);
-      setSnackbarProps({ isOpen: true, isGood: false, message: 'Ошибка при отправке данных' });
-
+    } catch (error : unknown) {
+      const axiosError = error as AxiosError<{message: string}>;
+      dispatch(showNotification({ isGood: false, message: axiosError.response!.data.message }));
     } finally {
       setButtonText("Отправить код");
       setIsLoading(false);
@@ -60,10 +58,6 @@ const GetCode: React.FC<GetCodeProps> = ({ onSwitchForm, setGetCodeRequest}) => 
 
 
     
-  };
-
-  const handleCloseSnackbar = () => {
-    setSnackbarProps(prevState => ({ ...prevState, isOpen: false }));
   };
 
   return (
@@ -108,13 +102,6 @@ const GetCode: React.FC<GetCodeProps> = ({ onSwitchForm, setGetCodeRequest}) => 
       >
         Уже зарегистрированы?
       </Button>
-
-      <SnackBarCustom
-        isOpen={snackbarProps.isOpen}
-        isGood={snackbarProps.isGood}
-        message={snackbarProps.message}
-        onClose={handleCloseSnackbar}
-      />
     </form>
   );
 }

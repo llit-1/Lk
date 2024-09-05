@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, TextField, CircularProgress } from "@mui/material";
 import "./Login.css";
 import PhoneNumberInput from "../../Components/InputPhone";
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { Navigate } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks/hook';
 import { showNotification } from '../../store/notificationSlice';
@@ -26,7 +26,7 @@ const FormLogin: React.FC<FormLoginProps> = ({ onSwitchForm }) => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post("https://localhost:7026/api/Authorization/login", {
+        const response = await axios.post("https://localhost:44300/api/Authorization/login", {
         phone: phone.replace(/\D/g, '').substring(1),
         password: password,
         code: ""
@@ -39,8 +39,13 @@ const FormLogin: React.FC<FormLoginProps> = ({ onSwitchForm }) => {
       } else {
         dispatch(showNotification({ isGood: false, message: 'Неправильный номер телефона или пароль!' }));
       }
-    } catch {
-      dispatch(showNotification({ isGood: false, message: 'Ошибка при отправке данных!' }));
+    } catch (error : unknown) {
+      const axiosError = error as AxiosError<{message: string}>;
+      if(axiosError.response && axiosError.response.data && axiosError.response.data!.message)
+      {
+        dispatch(showNotification({ isGood: false, message: axiosError.response.data.message }));
+      }
+      
     } finally {
       setButtonText("Войти");
       setIsLoading(false);

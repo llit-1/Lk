@@ -4,12 +4,7 @@ import { login } from '../../store/authSlice';
 import axios, { AxiosError } from 'axios';
 import { Button, CircularProgress } from '@mui/material';
 import PhoneNumberInput from '../../Components/InputPhone';
-import SnackBarCustom from '../../Components/SnackBarCustom';
-
-// Интерфейс для данных ошибки
-interface ErrorResponse {
-  message: string;
-}
+import { showNotification } from '../../store/notificationSlice';
 
 interface GetPhoneProps {
   onSwitchForm: (x: number) => void;
@@ -22,58 +17,35 @@ const GetPhone: React.FC<GetPhoneProps> = ({ onSwitchForm, phone, setPhone, setG
   const [buttonText, setButtonText] = useState<string>("Отправить код");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
-  const [snackbarProps, setSnackbarProps] = useState<{ isOpen: boolean, isGood: boolean, message: string }>({ isOpen: false, isGood: false, message: '' });
 
   const getCode = async (e: React.FormEvent) => {
     e.preventDefault();
     const phoneDigits = phone.replace(/\D/g, '').substring(1);
     if (phoneDigits.length !== 10) {
-      return setSnackbarProps({ isOpen: true, isGood: false, message: 'Введите корректный номер телефона!' });
+       return dispatch(showNotification({ isGood: false, message: 'Введите корректный номер телефона!' }));
     }
 
     dispatch(login({ token: "", phone: phoneDigits, code: null }));
 
     try {
-      const response = await axios.patch(`https://localhost:7026/api/Authorization/set-phone-code?phone=${phoneDigits}`);
-
+        const response = await axios.patch(`https://localhost:44300/api/Authorization/set-phone-code?phone=${phoneDigits}`);
+      console.log(response)
       if (response.status === 200) {
-        setSnackbarProps({ isOpen: true, isGood: true, message: 'Ожидайте звонка!' });
-        setGetCodeRequest(1);
+        dispatch(showNotification({ isGood: true, message: 'Ожидайте звонка!' }));
+        return setGetCodeRequest(1);
       } else {
-        setSnackbarProps({ isOpen: true, isGood: false, message: 'Введите корректный номер телефона!' });
+        return dispatch(showNotification({ isGood: false, message: 'Введите корректный номер телефона!' }));
       }
-
-    } catch (error) {
-      const axiosError = error as AxiosError<ErrorResponse>;
+    } catch (error : unknown) {
+      const axiosError = error as AxiosError<{message: string}>;
       if (axiosError.response && axiosError.response.data && axiosError.response.data.message) {
-        let messageFromBack: string = 'Неизвестная ошибка';
-
-        switch (axiosError.response.data.message) {
-          case "Attempts are over":
-            messageFromBack = "Вы слишком часто восстанавливали пароль, попробуйте позже";
-            break;
-          case "Phone is empty":
-            messageFromBack = "Введите корректный номер телефона";
-            break;
-          case "No phone in DB":
-            messageFromBack = "Пользователь не найден, обратитесь к руководителю";
-            break;
-          default:
-            messageFromBack = "Произошла неизвестная ошибка";
-        }
-
         setButtonText("Отправить код");
         setIsLoading(false);
-        setSnackbarProps({ isOpen: true, isGood: false, message: messageFromBack });
-
+        return dispatch(showNotification({ isGood: false, message: axiosError.response.data.message }));
       } else {
-        setSnackbarProps({ isOpen: true, isGood: false, message: 'Ошибка при отправке данных' });
+        return dispatch(showNotification({ isGood: false, message: 'Сервис временно недоступен, попробуйте позже' }));
       }
     }
-  };
-
-  const handleCloseSnackbar = () => {
-    setSnackbarProps(prevState => ({ ...prevState, isOpen: false }));
   };
 
   return (
@@ -109,13 +81,6 @@ const GetPhone: React.FC<GetPhoneProps> = ({ onSwitchForm, phone, setPhone, setG
       >
         Уже зарегистрированы?
       </Button>
-
-      <SnackBarCustom
-        isOpen={snackbarProps.isOpen}
-        isGood={snackbarProps.isGood}
-        message={snackbarProps.message}
-        onClose={handleCloseSnackbar}
-      />
     </form>
   );
 }

@@ -29,12 +29,12 @@ namespace lk.Server.Controllers
             string phone = loginModel.Phone;
             if (password == null || phone == null)
             {
-                return Unauthorized();
+                return Unauthorized(new { message = "Данные введены некорректно!"});
             }
             Personality user = _rKNETDBContext.Personalities.FirstOrDefault(c => c.Phone == phone);
             if (user == null || user.Password == null|| user.Password != Global.Encrypt(password))
             {
-                return Unauthorized();
+                return Unauthorized(new { message = "Такого пользователя не существует, обратитесь к руководителю" });
             }
             return Ok(GetToken(phone));
         }      
@@ -54,17 +54,17 @@ namespace lk.Server.Controllers
             string code = loginModel.Code;
             if (password == null || phone == null)
             {
-                return BadRequest("Password or Phone is null");
+                return BadRequest(new { message = "Данные введены некорректно!" });
             }
             Personality user = _rKNETDBContext.Personalities.FirstOrDefault(c => c.Phone == phone);
             if (user == null)
             {
-                return BadRequest("User not Found");
+                return BadRequest(new { message = "Пользователь не найден, обратитесь к руководителю!" });
             }
 
             if (user.PhoneCode != code)
             {
-                return BadRequest("invalid code");
+                return BadRequest(new { message = "Неверно введен код!" });
             }
             user.Password = Global.Encrypt(password);
             _rKNETDBContext.SaveChanges();
@@ -82,7 +82,7 @@ namespace lk.Server.Controllers
             user = _rKNETDBContext.Personalities.FirstOrDefault(c => c.Phone == phone);
             if (user == null)
             {
-                return BadRequest(new { message = "No phone in DB" });
+                return BadRequest(new { message = "Такого пользователя не существует, обратитесь к руководителю" });
             }
             if (user.LastPhoneCall == null)
             {
@@ -94,7 +94,7 @@ namespace lk.Server.Controllers
             }
             if (user.LastPhoneCall.Value.Date == DateTime.Now.Date && user.PhoneCallAttempts > 3)
             {
-                return BadRequest(new { message = "Attempts are over" });
+                return BadRequest(new { message = "Вы слишком часто запрашивали код, попробуйте позже" });
             }
             PhoneModel phoneModel = new();
             using (HttpClient client = new HttpClient())
@@ -115,7 +115,7 @@ namespace lk.Server.Controllers
             }
             if (phoneModel.status.ToLower() != "ok")
             {
-                return BadRequest(phoneModel.status);
+                return BadRequest(new { message = phoneModel.status });
             }
             if (user.PhoneCallAttempts > 3)
             {
@@ -140,11 +140,11 @@ namespace lk.Server.Controllers
             Personality user = _rKNETDBContext.Personalities.FirstOrDefault(c => c.Phone == phone);
             if (user == null)
             {
-                return BadRequest("User not Found");
+                return BadRequest(new { message = "Такого пользователя не существует, обратитесь к руководителю" });
             }
             if (code != user.PhoneCode)
             {
-                return BadRequest("invalid code");
+                return BadRequest(new { message = "Неверно введен код!" });
             }
             return Ok(code);
         }
