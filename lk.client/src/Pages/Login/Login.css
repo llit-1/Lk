@@ -6,6 +6,11 @@ header {
     border-bottom: #DDDDDD 1px solid;
 }
 
+span {
+    font-family: "Akrobat";
+    font-size: 16px;
+}
+
 img {
     width: 330px;
 }
@@ -15,6 +20,7 @@ img {
     width: 100%;
     background-color: #F5F5F5;
     padding: 20px;
+    font-family: "Akrobat";
 }
 
 .formAutorization > form {
@@ -24,6 +30,10 @@ img {
     gap: 15px;
     align-items: center;
     justify-content: center;
+}
+
+.formAutorization > p {
+    font-size: 14px;
 }
 
 .textInput {
@@ -42,7 +52,7 @@ p {
     align-content: center;
     color: #6d6d6d;
     padding-top: 30px;
-    font-family: "Roboto";
+    font-family: "Akrobat";
     font-size: 12px;
 }
 

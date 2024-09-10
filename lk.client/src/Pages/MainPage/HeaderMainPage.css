@@ -1,0 +1,51 @@
+.main_header {
+    height: 60px;
+    width: 100%;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: "Akrobat";
+    position: fixed;
+    top: 0;
+    z-index: 10;
+}
+
+
+.subMenu_text {
+    font-family: "Akrobat";
+    font-size: 16px;
+    padding: 0px;
+    
+}
+
+.main_header > .header_ul {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    height: 60px;
+    user-select: none; 
+    font-weight: 500;
+    background-color: white;
+    border-bottom: 1px solid #c0c0c077;
+}
+
+.header_li:hover {
+    background-color: #ce651a;
+}
+
+.header_li {
+    display: flex;
+    justify-content: center;
+    height: 60px;
+    align-items: center;
+    width: 60px;
+    background-color: #F47920;
+    cursor: pointer;
+}
+
+.header_img {
+    width: 30px;
+    height: 30px;
+}

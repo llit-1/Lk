@@ -47,10 +47,11 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({ value, onChange }) 
       onChange={handleChange}
       value={value} // Передаем значение из родительского компонента
       sx={{
-        fontFamily: 'Roboto, sans-serif',
-        '& .MuiOutlinedInput-root': { borderRadius: 0 },
+        '& .MuiOutlinedInput-root': { 
+          borderRadius: 0, 
+          fontFamily: 'Akrobat',
         backgroundColor: 'white',
-      }}
+      }}}
     />
   );
 }

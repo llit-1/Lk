@@ -1,67 +1,74 @@
 import React, { useEffect, useState } from 'react';
-import { Button, CircularProgress } from "@mui/material";
+import { Button, CircularProgress, Typography } from "@mui/material";
 import OTPInput from '../../Components/OTP';
-import {useAppSelector, useAppDispatch} from "../../hooks/hook"
-import axios, { AxiosError } from 'axios';
-import { login } from '../../store/authSlice';
-import { showNotification } from '../../store/notificationSlice';
+import { useAppSelector, useAppDispatch } from "../../hooks/hook"
+import {checkPhoneCode, setPhoneCode} from "../Requests"
+
 
 interface GetCodeProps {
   onSwitchForm: (x: number) => void;
-  setGetCodeRequest : React.Dispatch<React.SetStateAction<number>>;
+  setGetCodeRequest: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const GetCode: React.FC<GetCodeProps> = ({ onSwitchForm, setGetCodeRequest}) => {
+const GetCode: React.FC<GetCodeProps> = ({ onSwitchForm, setGetCodeRequest }) => {
   const [buttonText, setButtonText] = useState<string>("Подтвердить");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [buttonBlocked, setButtonBlocked] = useState<boolean>(true);
   const [codeFromSMS, setCodeFromSMS] = useState<string>('');
+  const [timerForCallAgain, setTimerForCallAgain] = useState<number>(30);
+
   const phone = useAppSelector((state) => state.auth.phone);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    setTimeout(() => {
-      setButtonBlocked(prev => !prev)
-  }, 30000);
-  }, [])
-
-
-  const sendCodeToBack = async(e: React.FormEvent) => {
-    e.preventDefault();
-    setButtonText("")
-    setIsLoading(prev => !prev)
-    
-    try {
-        const response = await axios.post("https://localhost:44300/api/Authorization/check-phone-code", {
-        Phone: phone,
-        Password: "",
-        Code: codeFromSMS
-      });
-
-      if(response.status === 200)
+      if(timerForCallAgain === 0)
       {
-        dispatch(login({ token: "", phone: phone, code: codeFromSMS }));
-        dispatch(showNotification({ isGood: true, message: 'Код принят' }));
-        return setGetCodeRequest(2)
-      } else {
-        return dispatch(showNotification({ isGood: false, message: 'Код неверный!' }));
+        setButtonBlocked(false);
       }
-      
+  }, [timerForCallAgain]);
 
-    } catch (error : unknown) {
-      const axiosError = error as AxiosError<{message: string}>;
-      dispatch(showNotification({ isGood: false, message: axiosError.response!.data.message }));
-    } finally {
-      setButtonText("Отправить код");
-      setIsLoading(false);
+  useEffect(() => {
+    if (timerForCallAgain !== 0) {
+      const interval = setInterval(() => {
+        setTimerForCallAgain((prev) => prev - 1);
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [timerForCallAgain]);
+
+  const sendCodeToBack = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setButtonText("");
+    setIsLoading(true);
+
+    const result = await checkPhoneCode(phone, codeFromSMS, dispatch); // Используем API функцию
+
+    if (result !== null) {
+      setGetCodeRequest(result);
     }
 
-
-    
+    setButtonText("Отправить код");
+    setIsLoading(false);
   };
 
+  const getCodeAgain = async () => {
+    if(phone)
+    {
+      return await setPhoneCode(phone, dispatch);
+    }
+  }
+
   return (
-    <form onSubmit={(e) => sendCodeToBack(e)}>
+      <form onSubmit={sendCodeToBack}>
+        <Typography variant="subtitle1" component="div" sx={{
+          color: "#6d6d6d",
+          fontFamily: 'Akrobat',
+          textAlign: "center"
+        }}>
+          Введите последние 4 цифры входящего звонка
+        </Typography>
+
       <OTPInput value={codeFromSMS} setValue={setCodeFromSMS} />
 
       <Button
@@ -70,12 +77,11 @@ const GetCode: React.FC<GetCodeProps> = ({ onSwitchForm, setGetCodeRequest}) => 
         variant="contained"
         type="submit"
         sx={{
-          backgroundColor: "#F47920", fontFamily: 'Roboto, sans-serif',
+          backgroundColor: "#F47920", fontFamily: 'Akrobat',
         }}
         disabled={codeFromSMS.length < 4}
       >
         {buttonText}
-
         {isLoading && <CircularProgress sx={{ color: "orange" }} size={26} />}
       </Button>
 
@@ -84,12 +90,16 @@ const GetCode: React.FC<GetCodeProps> = ({ onSwitchForm, setGetCodeRequest}) => 
         className={"buttonInput"}
         size="small"
         disabled={buttonBlocked}
-        onClick={() => onSwitchForm(0)}
+        onClick={() => {
+          setTimerForCallAgain(60);
+          setButtonBlocked(true);
+          getCodeAgain();
+        }}
         sx={{
-          color: "#6d6d6d", fontFamily: 'Roboto, sans-serif',
+          color: "#6d6d6d", fontFamily: 'Akrobat',
         }}
       >
-        Отправить код повторно
+        {timerForCallAgain === 0 ? "Отправить код повторно" : "Отправить код повторно " + timerForCallAgain } 
       </Button>
 
       <Button
@@ -97,7 +107,7 @@ const GetCode: React.FC<GetCodeProps> = ({ onSwitchForm, setGetCodeRequest}) => 
         size="small"
         onClick={() => onSwitchForm(0)}
         sx={{
-          color: "#6d6d6d", fontFamily: 'Roboto, sans-serif',
+          color: "#6d6d6d", fontFamily: 'Akrobat',
         }}
       >
         Уже зарегистрированы?

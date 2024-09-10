@@ -79,8 +79,10 @@ function OTP({
     currentIndex: number,
   ) => {
     const currentValue = event.target.value;
+    const numericValue = currentValue.replace(/\D/g, ''); // Оставляем только цифры
+  
     let indexToEnter = 0;
-
+  
     while (indexToEnter <= currentIndex) {
       if (inputRefs.current[indexToEnter].value && indexToEnter < currentIndex) {
         indexToEnter += 1;
@@ -88,15 +90,15 @@ function OTP({
         break;
       }
     }
-
+  
     onChange((prev) => {
       const otpArray = prev.split('');
-      const lastValue = currentValue[currentValue.length - 1];
+      const lastValue = numericValue[numericValue.length - 1];
       otpArray[indexToEnter] = lastValue;
       return otpArray.join('');
     });
-
-    if (currentValue !== '') {
+  
+    if (numericValue !== '') {
       if (currentIndex < length - 1) {
         focusInput(currentIndex + 1);
       }
@@ -157,6 +159,7 @@ function OTP({
                 onClick: () => handleClick(index),
                 onPaste: (event) => handlePaste(event, index),
                 value: value[index] ?? '',
+                type: 'tel',
               },
             }}
           />
@@ -206,7 +209,7 @@ const grey = {
 const InputElement = styled('input')(
   ({ theme }) => `
   width: 50px;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Akrobat;
   font-size: 0.975rem;
   font-weight: 400;
   line-height: 2.0;

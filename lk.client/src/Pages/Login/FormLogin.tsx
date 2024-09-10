@@ -2,63 +2,58 @@ import React, { useState } from 'react';
 import { Button, TextField, CircularProgress } from "@mui/material";
 import "./Login.css";
 import PhoneNumberInput from "../../Components/InputPhone";
-import axios, { AxiosError } from 'axios';
 import { Navigate } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks/hook';
-import { showNotification } from '../../store/notificationSlice';
+import { setLogin } from "../Requests";
 
 interface FormLoginProps {
   onSwitchForm: (index: number) => void;
 }
 
 const FormLogin: React.FC<FormLoginProps> = ({ onSwitchForm }) => {
-  localStorage.removeItem('authToken');
   const dispatch = useAppDispatch();
+  
+  // Состояние полей и логина
   const [password, setPassword] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [buttonText, setButtonText] = useState<string>("Войти");
   const [isAuth, setIsAuth] = useState<boolean>(false);
-  
+
+  // Очистка токена только при загрузке компонента
+  React.useEffect(() => {
+    localStorage.removeItem('authToken');
+  }, []);
+
+  // Обработка отправки формы
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setButtonText("");
-    setIsLoading(true);
+    
+    setButtonText(""); // Очистка текста кнопки
+    setIsLoading(true); // Включение индикатора загрузки
 
-    try {
-        const response = await axios.post("https://localhost:44300/api/Authorization/login", {
-        phone: phone.replace(/\D/g, '').substring(1),
-        password: password,
-        code: ""
-      });
+    const authToken = await setLogin(phone, password, dispatch); // Использование вынесенной функции для логина
 
-      if (response.status === 200) {
-        dispatch(showNotification({ isGood: true, message: 'Вы успешно авторизовались!' }));
-        localStorage.setItem("authToken", response.data);
-        setIsAuth(true);
-      } else {
-        dispatch(showNotification({ isGood: false, message: 'Неправильный номер телефона или пароль!' }));
-      }
-    } catch (error : unknown) {
-      const axiosError = error as AxiosError<{message: string}>;
-      if(axiosError.response && axiosError.response.data && axiosError.response.data!.message)
-      {
-        dispatch(showNotification({ isGood: false, message: axiosError.response.data.message }));
-      }
-      
-    } finally {
-      setButtonText("Войти");
-      setIsLoading(false);
+    if (authToken) {
+      setIsAuth(true); // Успешная авторизация
+    } else {
+      setButtonText("Войти"); // Восстановление текста кнопки при ошибке
+      setIsLoading(false); // Отключение индикатора загрузки при ошибке
     }
   };
 
+  // Перенаправление после успешного логина
   if (isAuth) {
-    return <Navigate to="/MainPage" replace={true} />;
+    return <Navigate to="/Main/Tiles" replace={true} />;
   }
 
   return (
     <form onSubmit={handleLogin}>
-      <PhoneNumberInput value={phone} onChange={(e) => setPhone(e.target.value)} />
+      <PhoneNumberInput 
+        value={phone} 
+        onChange={(e) => setPhone(e.target.value)} 
+      />
+      
       <TextField
         required
         className="textInput"
@@ -71,7 +66,6 @@ const FormLogin: React.FC<FormLoginProps> = ({ onSwitchForm }) => {
         variant="outlined"
         size="medium"
         sx={{
-          fontFamily: 'Roboto, sans-serif',
           '& .MuiOutlinedInput-root': { borderRadius: 0 },
           backgroundColor: 'white',
         }}
@@ -84,7 +78,8 @@ const FormLogin: React.FC<FormLoginProps> = ({ onSwitchForm }) => {
         type="submit"
         sx={{
           backgroundColor: "#F47920",
-          fontFamily: 'Roboto, sans-serif',
+          fontFamily: 'Akrobat',
+          fontSize: "14px"
         }}
         disabled={isLoading}
       >
@@ -97,7 +92,8 @@ const FormLogin: React.FC<FormLoginProps> = ({ onSwitchForm }) => {
         onClick={() => onSwitchForm(1)}
         sx={{
           color: "#6d6d6d",
-          fontFamily: 'Roboto, sans-serif',
+          fontFamily: 'Akrobat',
+          fontSize: "14px"
         }}
       >
         Зарегистрироваться / Забыли пароль?

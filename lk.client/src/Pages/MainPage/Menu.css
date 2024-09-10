@@ -1,0 +1,59 @@
+.menu {
+    width: 55vw;
+    padding: 0px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.menu span {
+    font-family: "Akrobat";
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.menu > li {
+    user-select: none; 
+}
+
+.menu > li:hover {
+    background-color: rgb(236, 235, 235);
+}
+
+.menu > ul {
+    padding: 0;
+}
+
+@media screen and (min-width: 900px) {
+    .menu {
+        width: 25vw;
+    }
+}
+
+@media screen and (min-width: 1600px) {
+    .menu {
+        width: 15vw;
+    }
+}
+
+main {
+    width: 100%;
+    padding-top: 60px;
+    padding-bottom: 25px;
+    min-height: 100dvh;
+    background-color: #EEEEEE;
+
+}
+
+footer {
+    position: fixed;
+    height: 25px;
+    bottom: 0;
+    width: 100vw;
+    background-color: #DDDDDD;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #777777;
+}

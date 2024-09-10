@@ -2,7 +2,6 @@ import { useState } from 'react';
 import "./FormLogin"
 import FormLogin from './FormLogin';
 import FormRegister from './FormRegister';
-// import FormResetPassword from './FormResetPassword';
 import "./Login.css";
 
 function Login() {
@@ -20,8 +19,7 @@ function Login() {
             <div className={"formAutorization"}>
                 {isLoginForm === 0 && (<FormLogin onSwitchForm={(x) => setIsLoginForm(x)} />)}
                 {isLoginForm === 1 && (<FormRegister onSwitchForm={(x) => setIsLoginForm(x)} />)}
-                {/* {isLoginForm === 2 && (<FormResetPassword onSwitchForm={(x) => setIsLoginForm(x)} />)} */}
-                <p>v 0.0.0.1</p>
+                <p>{import.meta.env.VITE_VERSION}</p>
             </div>
 
         </>

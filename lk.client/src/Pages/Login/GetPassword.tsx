@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { Button, TextField, CircularProgress, FormControlLabel, Checkbox } from '@mui/material';
-import axios from 'axios';
 import SnackBarCustom from "../../Components/SnackBarCustom";
-import { login } from '../../store/authSlice';
 import {useAppSelector, useAppDispatch} from "../../hooks/hook"
 import { Navigate } from "react-router";
+import {setPasswordAndLogin} from "../Requests"
 
 interface GetPasswordProps {
   onSwitchForm: (x: number) => void;
@@ -20,6 +19,7 @@ const GetPassword: React.FC<GetPasswordProps> = ({ onSwitchForm }) => {
   const dispatch = useAppDispatch();
   const phone = useAppSelector(state => state.auth.phone);
   const code = useAppSelector(state => state.auth.code)
+  
 
   const sendPasswordToBack = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,43 +32,17 @@ const GetPassword: React.FC<GetPasswordProps> = ({ onSwitchForm }) => {
     setButtonText('');
     setIsLoading(true);
 
-    try {
+    const isAuthSuccessful = await setPasswordAndLogin(phone, password, code, dispatch); // Используем API функцию
 
-        const response = await axios.post("https://localhost:44300/api/Authorization/set-password", {
-        Phone: phone,
-        Password: password,
-        Code: code
-      });
-
-      if(response.status === 200)
-      {
-          const response = await axios.post("https://localhost:44300/api/Authorization/login", {
-          Phone: phone,
-          Password: password,
-          Code: code
-        });
-        if (response.status === 200) {
-          setSnackbarProps({ isOpen: true, isGood: true, message: 'Вы успешно авторизовались!' });
-          localStorage.setItem("authToken", response.data);
-          dispatch(login({ token: response.data, phone: phone, code: code }));
-          setIsAuth(true)
-        } else {
-          setSnackbarProps({ isOpen: true, isGood: false, message: 'Неправильный номер телефона или пароль' });
-        }
-
-      } else {
-        setSnackbarProps({ isOpen: true, isGood: false, message: 'Ошибка при смене пароля' });
-      }
-      
-
-    } catch (error) {
-      console.error("Ошибка:", error);
-      setSnackbarProps({ isOpen: true, isGood: false, message: 'Ошибка при отправке данных' });
-
-    } finally {
-      setButtonText("Войти");
-      setIsLoading(false);
+    if (isAuthSuccessful) {
+      setSnackbarProps({ isOpen: true, isGood: true, message: 'Вы успешно авторизовались!' });
+      setIsAuth(prev => !prev)
+    } else {
+      setSnackbarProps({ isOpen: true, isGood: false, message: 'Ошибка при авторизации' });
     }
+
+    setButtonText('Войти');
+    setIsLoading(false);
   };
 
   const handleCloseSnackbar = () => {
@@ -88,7 +62,7 @@ const GetPassword: React.FC<GetPasswordProps> = ({ onSwitchForm }) => {
         variant="outlined"
         size="medium"
         sx={{
-          fontFamily: 'Roboto, sans-serif',
+          fontFamily: 'Akrobat',
           '& .MuiOutlinedInput-root': { borderRadius: 0 },
           backgroundColor: 'white',
         }}
@@ -105,7 +79,7 @@ const GetPassword: React.FC<GetPasswordProps> = ({ onSwitchForm }) => {
         variant="outlined"
         size="medium"
         sx={{
-          fontFamily: 'Roboto, sans-serif',
+          fontFamily: 'Akrobat',
           '& .MuiOutlinedInput-root': { borderRadius: 0 },
           backgroundColor: 'white',
         }}
@@ -121,7 +95,7 @@ const GetPassword: React.FC<GetPasswordProps> = ({ onSwitchForm }) => {
         disabled={isLoading}
         sx={{
           backgroundColor: '#F47920',
-          fontFamily: 'Roboto, sans-serif',
+          fontFamily: 'Akrobat',
         }}
       >
         {buttonText}
@@ -134,7 +108,7 @@ const GetPassword: React.FC<GetPasswordProps> = ({ onSwitchForm }) => {
         onClick={() => onSwitchForm(0)}
         sx={{
           color: '#6d6d6d',
-          fontFamily: 'Roboto, sans-serif',
+          fontFamily: 'Akrobat',
         }}
       >
         Уже зарегистрированы?
@@ -147,7 +121,7 @@ const GetPassword: React.FC<GetPasswordProps> = ({ onSwitchForm }) => {
         onClose={handleCloseSnackbar}
       />
 
-    {isAuth && <Navigate to="/MainPage" />}
+    {isAuth && <Navigate to="/Main/Tiles" />}
     </form>
   );
 };

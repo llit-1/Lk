@@ -1,5 +1,5 @@
 import React from 'react';
-import { Snackbar, Alert, Slide, SlideProps } from '@mui/material';
+import { Snackbar, Alert, Slide, SlideProps, Button } from '@mui/material';
 
 type SnackBarCustomProps = {
   isOpen: boolean;
@@ -15,18 +15,27 @@ const SnackBarCustom: React.FC<SnackBarCustomProps> = ({ isOpen, isGood, message
   }
 
   return (
-    <Snackbar
-      open={isOpen}
-      TransitionComponent={TransitionDown}
-      autoHideDuration={6000}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      onClose={onClose}
-      message={message}
-    >
-      <Alert onClose={onClose} severity={isGood ? "success" : "error"} sx={{ width: '100%' }}>
-        {message}
-      </Alert>
-    </Snackbar>
+  <Snackbar
+    key={message}
+    open={isOpen}
+    TransitionComponent={TransitionDown}
+    autoHideDuration={4000}
+    anchorOrigin={{ vertical: "top", horizontal: "right" }}
+    onClose={onClose}
+    message={message}
+    action={
+    <React.Fragment>
+      <Button color="inherit" onClick={onClose}>
+        Close
+      </Button>
+    </React.Fragment>
+  }
+>
+  <Alert onClose={onClose} severity={isGood ? "success" : "error"} sx={{ width: '100%' }}>
+    {message}
+  </Alert>
+</Snackbar>
+
   );
 };
 

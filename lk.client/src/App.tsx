@@ -1,9 +1,10 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "../src/Pages/Login/Login";
-import MainPage from "./Pages/MainPage/MainPage.tsx";
+import Main from "./Pages/MainPage/Main.tsx";
 import {useAppDispatch, useAppSelector} from './hooks/hook.ts'
 import SnackBarCustom from "./Components/SnackBarCustom.tsx"
 import { hideNotification } from './store/notificationSlice';
+import MenuTiles from "./Pages/MainPage/MenuTiles.tsx"
 
 function App() {
     const storedToken = localStorage.getItem("authToken");
@@ -14,7 +15,7 @@ function App() {
 
     const handleCloseSnackbar = () => {
         dispatch(hideNotification());
-      };
+    };
 
     return (
         <>
@@ -25,9 +26,12 @@ function App() {
                     onClose={handleCloseSnackbar}
                 />
             <Routes>
-                {storedToken ? <Route path="/" element={<Navigate to="/MainPage" />} /> : <Route path="/" element={<Navigate to="/Login" />} />}
+                {storedToken ? <Route path="/" element={<Navigate to="/Main/Tiles" />} /> : <Route path="/" element={<Navigate to="/Login" />} />}
                 <Route path="/Login" element={<Login />} />
-                <Route path="/MainPage" element={<MainPage/>} />
+                <Route path="/Main" element={<Main />}>
+                    <Route path="Tiles" element={<MenuTiles />} />
+                </Route>
+                
             </Routes>
         </>
     );
