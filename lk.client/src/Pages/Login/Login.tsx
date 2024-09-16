@@ -11,7 +11,7 @@ function Login() {
     return (
         <>
             <header>
-                <p onClick={() => setIsLoginForm(0)}>
+                <p className='login_p' onClick={() => setIsLoginForm(0)}>
                     <img src="/logo-big.svg" alt="Logo" />
                 </p>
             </header>
@@ -19,7 +19,7 @@ function Login() {
             <div className={"formAutorization"}>
                 {isLoginForm === 0 && (<FormLogin onSwitchForm={(x) => setIsLoginForm(x)} />)}
                 {isLoginForm === 1 && (<FormRegister onSwitchForm={(x) => setIsLoginForm(x)} />)}
-                <p>{import.meta.env.VITE_VERSION}</p>
+                <p className='login_p'>{import.meta.env.VITE_VERSION}</p>
             </div>
 
         </>

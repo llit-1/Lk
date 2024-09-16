@@ -2,7 +2,7 @@ import React from 'react'
 import "./HeaderMainPage.css"
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import { MenuItem, Divider, Menu} from '@mui/material/';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 interface HeaderMainPageProps {
@@ -10,7 +10,7 @@ interface HeaderMainPageProps {
 }
 
 const HeaderMainPage : React.FC<HeaderMainPageProps> = ({toggleDrawer}) => {
-
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -24,7 +24,7 @@ const HeaderMainPage : React.FC<HeaderMainPageProps> = ({toggleDrawer}) => {
     <header className='main_header'>
       <ul className='header_ul'>
         <li className='header_li' onClick={toggleDrawer(true)}> <MenuOutlinedIcon sx={{color: "white"}}/> </li>  
-        <li className='header_li_title'> Личный Кабинет </li>
+        <li className='header_li_title' onClick={() => navigate("/Main/Tiles")}> Личный Кабинет </li>
         <li className='header_li' 
           aria-controls={open ? 'account-menu' : undefined}
           aria-haspopup="true"

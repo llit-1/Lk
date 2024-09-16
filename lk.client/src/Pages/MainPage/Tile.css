@@ -5,7 +5,8 @@
     justify-content: center;
     padding: 10px;
     flex-direction: column;
-    gap: 10px
+    gap: 10px;
+    position: relative;
 }
 
 .tile {
@@ -80,6 +81,11 @@
     height: 90px;
 }
 
+.wrapper_tiles .tile {
+    text-decoration: none;
+    color: #6d6d6d;
+}
+
  @media screen and (min-width: 850px) {
     .tile {
         flex: 1 1 30vw; 
@@ -107,4 +113,29 @@
         flex-direction: row; /* Плитки в строку */
         justify-content: space-evenly; /* Пространство между плитками */
     }
+}
+
+.helpWithJobs {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin-right: 13px;
+    margin-bottom: 40px;
+    background-color: #F47920;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    /* text-align: center; */
+    display: flex;
+    /* vertical-align: middle; */
+    justify-content: center;
+    align-items: center;
+    color: white;
+    cursor: pointer;
+    animation: pulse-shadow 1.5s infinite;
+    transition: all 0.3s ease-in-out;
+}
+
+.helpWithJobs:hover {
+    background-color: #ce651a;
 }

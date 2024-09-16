@@ -212,7 +212,7 @@ const InputElement = styled('input')(
   font-family: 'Akrobat;
   font-size: 0.975rem;
   font-weight: 400;
-  line-height: 2.0;
+  line-height: 2.3;
   padding: 8px 0px;
   border-radius: 8px;
   text-align: center;

@@ -6,7 +6,7 @@ import App from '../src/App'
 import { Provider } from "react-redux";
 import store from './store/index'
 import { ThemeProvider } from '@mui/material/styles';
-import theme from './theme'; // Импорт вашей темы
+import theme from './theme';
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>

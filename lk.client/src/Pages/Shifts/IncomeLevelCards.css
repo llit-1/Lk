@@ -1,0 +1,153 @@
+.incomeCard {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    width: 100%;
+}
+
+.shifts_wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+}
+
+.incomeCard_header {
+    padding-top: 10px;
+    display: flex;
+    gap: 10px;
+    font-size: 1.6em;
+    justify-content: start;
+    align-items: end;
+    font-weight: 700;
+    height: fit-content;
+
+}
+
+.header_textMark {
+    background-color: #EF4722;
+    color: white;
+    font-size: 0.9em;
+    padding: 0px 10px 5px 10px;
+    border-radius: 10px;
+    font-weight: 700;
+    line-height: 1.2;
+    vertical-align: middle;
+    letter-spacing: 1px;
+}
+
+.incomeCard_body {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    gap: 10px;
+    padding: 15px;
+    border-radius: 25px;
+    box-shadow: 0px 0px 10px 1px #00000033;
+}
+
+.body_textmark {
+    background-color: #EF4722;
+    color: white;
+    width: fit-content;
+    font-size: 1em;
+    padding: 8px 15px;
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+.body_textmark-fullWidth {
+    background-color: #EF4722;
+    color: white;
+    width: 100%;
+    font-size: 1em;
+    padding: 8px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.body_text {
+    display: flex;
+    flex-direction: column;
+}
+
+.incomeCard_table {
+    border-collapse: collapse;
+}
+
+.incomeCard_table td {
+    border: 2.5px solid white;
+    padding: 5px;
+    padding-right: 2px;
+    padding-left: 0px;
+}
+
+.incomeCard_table .table_lefttd {
+    border-left: 0px;
+}
+
+.incomeCard_table td b {
+    padding: 0px 10px;
+    vertical-align: middle;
+}
+
+.incomeCard_body > .incomeCard_header {
+    font-size: 1.4em;
+}
+
+.incomeCard_body a {
+    text-decoration: none;
+    color: white;
+    padding: 8px;
+    font-weight: 600;
+    border-radius: 12px;
+    background-color: #EF4722;
+}
+
+.incomeCard_telText {
+    padding-bottom: 15px;
+}
+
+.incomeCard_tel {
+    display: flex;
+    justify-content: center;
+}
+
+@media screen and (min-width: 1250px) {
+    .incomeCard_body {
+        flex: 0 1 30vw;
+        flex-basis: min-content;
+        max-width: 40vw;
+        min-width: 31vw;
+    }
+
+    .shifts_wrapper {
+        flex-direction: row;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+        align-items: normal;
+    }
+}
+
+@media screen and (min-width: 870px) and (max-width: 1249px) {
+    .incomeCard_body {
+        flex: 0 1 30vw;
+        flex-basis: min-content;
+        max-width: 40vw;
+        min-width: 47vw;
+    }
+
+    .shifts_wrapper {
+        flex-direction: row;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+        align-items: normal;
+    }
+}
+
+.incomeCard_tel > a:hover {
+    background-color: #d1330f;
+}

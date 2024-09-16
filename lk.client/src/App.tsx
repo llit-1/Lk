@@ -5,6 +5,7 @@ import {useAppDispatch, useAppSelector} from './hooks/hook.ts'
 import SnackBarCustom from "./Components/SnackBarCustom.tsx"
 import { hideNotification } from './store/notificationSlice';
 import MenuTiles from "./Pages/MainPage/MenuTiles.tsx"
+import { IncomeLevelCards } from "./Pages/Shifts/IncomeLevelCards.tsx";
 
 function App() {
     const storedToken = localStorage.getItem("authToken");
@@ -30,6 +31,7 @@ function App() {
                 <Route path="/Login" element={<Login />} />
                 <Route path="/Main" element={<Main />}>
                     <Route path="Tiles" element={<MenuTiles />} />
+                    <Route path="Help" element={<IncomeLevelCards />} />
                 </Route>
                 
             </Routes>

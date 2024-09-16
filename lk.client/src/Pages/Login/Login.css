@@ -46,7 +46,7 @@ img {
     max-width: 400px;
 }
 
-p {
+.login_p {
     display: flex;
     justify-content: center;
     align-content: center;
@@ -56,6 +56,6 @@ p {
     font-size: 12px;
 }
 
-header > p {
+header > .login_p {
     cursor: pointer;
 }

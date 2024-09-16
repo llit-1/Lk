@@ -13,7 +13,7 @@ function Main () {
 
     const location = useLocation();
 
-    useEffect(() => setIsOpen(prev => !prev), [location])
+    useEffect(() => setIsOpen(false), [location])
 
   return (
     <>
