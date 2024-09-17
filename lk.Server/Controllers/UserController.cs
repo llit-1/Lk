@@ -21,7 +21,7 @@ namespace lk.Server.Controllers
 
 
         [HttpGet("get")]
-     //   [Authorize]
+        [Authorize]
         public IActionResult GetUser(string phone)
         {
             if (phone.IsNullOrEmpty())
@@ -38,17 +38,41 @@ namespace lk.Server.Controllers
             var personalityVersion = _rKNETDBContext.PersonalityVersions.Include(c => c.JobTitle)
                                                     .Include(c => c.Schedule)
                                                     .Include(c => c.Location)
+                                                    .Include(c=> c.Entity)
                                                     .FirstOrDefault(c => c.Personalities == personality && c.Actual == 1);
+            if (personalityVersion is null)
+            {
+                return BadRequest(new { message = "отсутствует актуальная personalityVersion" });
+            }
+            if (personalityVersion.JobTitle is null)
+            {
+                return BadRequest(new { message = "отсутствует JobTitle" });
+            }
+            if (personalityVersion.Schedule is null)
+            {
+                return BadRequest(new { message = "отсутствует Schedule" });
+            }
+            if (personalityVersion.Location is null)
+            {
+                return BadRequest(new { message = "отсутствует Location" });
+            }
+            if (personalityVersion.Entity is null)
+            {
+                return BadRequest(new { message = "отсутствует Entity" });
+            }
 
-
-            //PersonalityVersion? personalityVersion = _rKNETDBContext.PersonalityVersions.FirstOrDefault(c => c.Personalities == personality && c.Actual == 1);
-            //if (personalityVersion is null)
-            //{
-            //    return BadRequest(new { message = "отсутствует актуальная personalityVersion" });
-            //}
-            //JobTitle? jobTitle = _rKNETDBContext.JobTitles.FirstOrDefault(c => c == personality.JobTitle);
-
-            return new JsonResult(personalityVersion);
+            User user = new();
+            user.Surname = personalityVersion.Surname;
+            user.Name = personalityVersion.Name;
+            user.Patronymic = personalityVersion.Patronymic;
+            user.Birthday = DateOnly.FromDateTime(personality.BirthDate);
+            user.JobTitle = personalityVersion.JobTitle.Name;
+            user.Location = personalityVersion.Location.Name;
+            user.ScheduleStart = personalityVersion.Schedule.BeginTime.ToString(@"hh\:mm");
+            user.ScheduleEnd = personalityVersion.Schedule.EndTime.ToString(@"hh\:mm");
+            user.Entity = personalityVersion.Entity.Name;
+            user.Experience = (DateTime.Now - personalityVersion.HireDate).Days;
+            return new JsonResult(user);
         }
 
 

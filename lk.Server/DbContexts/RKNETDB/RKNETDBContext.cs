@@ -16,7 +16,7 @@ namespace lk.Server.DbContexts.RKNETDB
         public DbSet<DbContexts.RKNETDB.Models.Personality> Personalities { get; set; } // сотрудники
         public DbSet<DbContexts.RKNETDB.Models.PersonalityVersion> PersonalityVersions { get; set; } // версии сотрудников
         public DbSet<DbContexts.RKNETDB.Models.Entity> Entity { get; set; } // юридические лица
-        public DbSet<DbContexts.RKNETDB.Models.JobTitle> JobTitle { get; set; } // должность
+        public DbSet<DbContexts.RKNETDB.Models.JobTitle> JobTitles { get; set; } // должность
         public DbSet<DbContexts.RKNETDB.Models.Schedule> Schedules { get; set; } // типы смен
         public DbSet<DbContexts.RKNETDB.Models.Location> Locations { get; set; } // локация
 
