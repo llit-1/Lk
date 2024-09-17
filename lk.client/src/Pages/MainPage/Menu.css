@@ -38,8 +38,7 @@
 main {
     width: 100%;
     padding-top: 60px;
-    padding-bottom: 25px;
-    min-height: 100dvh;
+    min-height: calc(100dvh - 25px);
     background-color: #EEEEEE;
 
 }

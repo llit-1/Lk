@@ -19,15 +19,15 @@ const MenuTiles = () => {
         <p>Центр обучения</p>
       </Link>
 
+      <Link to="/Main/SalaryLevel" className='tile new'> {/* Ссылка на страницу обучения */}
+        <img src='/morale.gif' alt=""/>
+        <p>Уровень дохода</p>
+      </Link>
+
       <Link to="/Main/Help" className='tile'> {/* Ссылка на страницу помощи */}
         <img src='/help.gif' alt=""/>
         <p>Помощь</p>
       </Link>
-
-
-      <div className="helpWithJobs">
-        i
-      </div>
 
     </div>
   )

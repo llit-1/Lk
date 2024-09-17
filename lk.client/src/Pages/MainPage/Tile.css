@@ -7,6 +7,7 @@
     flex-direction: column;
     gap: 10px;
     position: relative;
+    font-family: "Akrobat" !important;
 }
 
 .tile {
@@ -40,7 +41,7 @@
 }
 
 .new::after {
-    content: "new";
+    content: "новое";
     display: flex;
     justify-content: center;
     padding-top: 10px;
@@ -86,56 +87,10 @@
     color: #6d6d6d;
 }
 
- @media screen and (min-width: 850px) {
-    .tile {
-        flex: 1 1 30vw; 
-        max-width: 30vw; 
-        min-width: 20vw; 
-    }
-
+ @media screen and (min-width: 587px) {
     .wrapper_tiles {
-        flex-direction: row;
-        justify-content: space-evenly; 
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Устанавливаем минимальную ширину плитки */
+        gap: 10px; /* Зазоры между плитками */
     }
-}
-
-@media screen and (min-width: 500px) and (max-width: 849px) {
-    .tile {
-        flex-grow: inherit;
-        flex-shrink: inherit;
-        flex-basis: 46vw;
-        max-width: 48vw;
-        min-width: 10vw;
-    }
-
-    .wrapper_tiles {
-        flex-wrap: wrap;
-        flex-direction: row; /* Плитки в строку */
-        justify-content: space-evenly; /* Пространство между плитками */
-    }
-}
-
-.helpWithJobs {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    margin-right: 13px;
-    margin-bottom: 40px;
-    background-color: #F47920;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    /* text-align: center; */
-    display: flex;
-    /* vertical-align: middle; */
-    justify-content: center;
-    align-items: center;
-    color: white;
-    cursor: pointer;
-    animation: pulse-shadow 1.5s infinite;
-    transition: all 0.3s ease-in-out;
-}
-
-.helpWithJobs:hover {
-    background-color: #ce651a;
 }

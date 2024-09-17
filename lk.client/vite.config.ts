@@ -1,5 +1,5 @@
 import { fileURLToPath, URL } from 'node:url';
-
+import compression from 'vite-plugin-compression'
 import { defineConfig } from 'vite';
 import plugin from '@vitejs/plugin-react';
 import fs from 'fs';
@@ -34,7 +34,13 @@ const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_H
     env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'https://localhost:7021';
 
 export default defineConfig({
-    plugins: [plugin()],
+    plugins: [
+        plugin(),
+        compression({
+              threshold: 10240,
+              algorithm: 'gzip',
+        })
+    ],
     resolve: {
         alias: {
             '@': fileURLToPath(new URL('./src', import.meta.url))
@@ -42,10 +48,10 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '^/weatherforecast': {
+            '/api/Authorization/login': {
                 target,
-                secure: false
-            }
+                secure: false,
+            },
         },
         port: 7021,
         https: {
@@ -54,3 +60,4 @@ export default defineConfig({
         }
     }
 })
+

@@ -5,6 +5,7 @@
     gap: 20px;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     width: 100%;
+    height: 100%;
 }
 
 .shifts_wrapper {
@@ -42,7 +43,7 @@
 .incomeCard_body {
     display: flex;
     flex-direction: column;
-    width: fit-content;
+    width: 100%;
     gap: 10px;
     padding: 15px;
     border-radius: 25px;
@@ -117,11 +118,16 @@
 }
 
 @media screen and (min-width: 1250px) {
+
     .incomeCard_body {
         flex: 0 1 30vw;
         flex-basis: min-content;
         max-width: 40vw;
         min-width: 31vw;
+    }
+
+    .incomeCard_questions {
+        justify-content: center;
     }
 
     .shifts_wrapper {
@@ -138,6 +144,10 @@
         flex-basis: min-content;
         max-width: 40vw;
         min-width: 47vw;
+    }
+    
+    .incomeCard_questions {
+        justify-content: center;
     }
 
     .shifts_wrapper {

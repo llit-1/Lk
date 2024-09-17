@@ -34,6 +34,12 @@ const Menu : React.FC<MenuProps> = ({isOpen, toggleDrawer}) => {
                 <ListItemText primary="Центр обучения" />
               </ListItemButton>
             </ListItem>
+
+            <ListItem sx={{ height: "60px", borderBottom: "1px solid #D3D2D2" }}>
+              <ListItemButton component={Link} to="/Main/SalaryLevel">
+                <ListItemText primary="Уровень дохода" />
+              </ListItemButton>
+            </ListItem>
     
             <ListItem sx={{ height: "60px", borderBottom: "1px solid #D3D2D2" }}>
               <ListItemButton component={Link} to="/Main/Help">

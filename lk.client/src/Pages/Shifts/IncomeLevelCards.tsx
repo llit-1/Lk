@@ -224,7 +224,7 @@ export const IncomeLevelCards = () => {
         </div>
         
 
-        <div className='incomeCard_body'>
+        <div className='incomeCard_body incomeCard_questions'>
             <div className='incomeCard_header'>
                     Если остались <p className='header_textMark'>вопросы</p> 
             </div>

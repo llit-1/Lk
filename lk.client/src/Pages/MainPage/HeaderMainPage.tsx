@@ -31,7 +31,7 @@ const HeaderMainPage : React.FC<HeaderMainPageProps> = ({toggleDrawer}) => {
           onClick={handleClick}
           aria-expanded={open ? 'true' : undefined}
         >
-          <img className='header_img' src='/avatar.gif'></img>       
+          <img className='header_img' src='/avatar.gif' alt='Profile'></img>       
         </li>  
       </ul>
 
@@ -43,13 +43,13 @@ const HeaderMainPage : React.FC<HeaderMainPageProps> = ({toggleDrawer}) => {
         onClick={handleClose}
         transformOrigin={{ horizontal: 'center', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-        sx={{ width: '300px', maxWidth: '100%', padding: '10px' }} // Увеличьте ширину и добавьте отступы
+        sx={{ width: '300px', maxWidth: '100%', padding: '10px' }}
       >
         <Divider />
 
         <MenuItem 
           component={Link} 
-          to="/Profile" 
+          to="/Main/Profile" 
           onClick={handleClose} 
           sx={{ fontSize: '18px', padding: '12px 16px' }}
         > 
