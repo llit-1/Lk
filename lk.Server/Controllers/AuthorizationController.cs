@@ -8,6 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using static lk.Server.Controllers.AuthorizationController;
 
 namespace lk.Server.Controllers
 {
@@ -34,7 +35,7 @@ namespace lk.Server.Controllers
             Personality user = _rKNETDBContext.Personalities.FirstOrDefault(c => c.Phone == phone);
             if (user == null || user.Password == null|| user.Password != Global.Encrypt(password))
             {
-                return Unauthorized(new { message = "Такого пользователя не существует, обратитесь к руководителю" });
+                return Unauthorized(new { message = "Ошибка авторизации" });
             }
             return Ok(GetToken(phone));
         }      
@@ -70,6 +71,38 @@ namespace lk.Server.Controllers
             _rKNETDBContext.SaveChanges();
             return Ok("Password set successfully");
         }
+
+        [HttpPatch("change-password")]
+        [Authorize]
+        public IActionResult ChangePassword([FromBody] ChangePasswordModel changePasswordModel)
+        {
+            if (changePasswordModel is null)
+            {
+                return BadRequest(new { message = "changePasswordModel is null" });
+            }
+            string phone = changePasswordModel.Phone;
+            string oldPassword = changePasswordModel.OldPassword;            
+            string newPassword = changePasswordModel.NewPassword;
+            if (phone == null || oldPassword == null || newPassword== null)
+            {
+                return BadRequest(new { message = "Данные введены некорректно!" });
+            }
+            Personality user = _rKNETDBContext.Personalities.FirstOrDefault(c => c.Phone == phone);
+            if (user == null)
+            {
+                return BadRequest(new { message = "Пользователь не найден, обратитесь к руководителю!" });
+            }
+
+            if (Global.Encrypt(oldPassword) != user.Password)
+            {
+                return BadRequest(new { message = "Неверно введен старый пароль" });
+            }
+            user.Password = Global.Encrypt(newPassword);
+            _rKNETDBContext.SaveChanges();
+            return Ok("Password set successfully");
+        }
+
+
 
         [HttpPatch("set-phone-code")]
         public async Task<IActionResult> SetPhoneCode(string phone)
@@ -184,6 +217,13 @@ namespace lk.Server.Controllers
             public decimal balance { get; set; }
         }
 
+        public class ChangePasswordModel
+        {
+            public string Phone { get; set; }
+            public string OldPassword { get; set; }
+            public string NewPassword { get; set; }
+
+        }
 
 
     }
