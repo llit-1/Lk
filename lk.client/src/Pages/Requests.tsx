@@ -2,21 +2,27 @@ import axios, { AxiosError } from 'axios';
 import { AppDispatch } from "../store/index";
 import { showNotification } from '../store/notificationSlice';
 import { login } from '../store/authSlice';
+import { User } from "../interfaces/user";
 
+// Получаем хоста для дев режима
 const getHost = (): string => {
-  let host: string = "";
-  if (import.meta.env.VITE_DEV == "1" && import.meta.env.VITE_DEV_HOST) {
-    host = import.meta.env.VITE_DEV_HOST;
-  }
-  return host;
+  return import.meta.env.VITE_DEV === "1" && import.meta.env.VITE_DEV_HOST 
+    ? import.meta.env.VITE_DEV_HOST 
+    : "";
+};
+
+// Обработчик ошибок
+const handleError = (error: unknown, dispatch: AppDispatch, defaultMessage: string) => {
+  const axiosError = error as AxiosError<{ message: string }>;
+  const message = axiosError.response?.data.message || defaultMessage;
+  dispatch(showNotification({ isGood: false, message }));
 };
 
 // Функция для отправки запроса на сервер для подтверждения телефона
 export const setPhoneCode = async (phoneDigits: string, dispatch: AppDispatch): Promise<number | null> => {
   const host = getHost();
   try {
-    const response = await axios.patch(host + `/api/Authorization/set-phone-code?phone=${phoneDigits}`);
-
+    const response = await axios.patch(`${host}/api/Authorization/set-phone-code?phone=${phoneDigits}`);
     if (response.status === 200) {
       dispatch(showNotification({ isGood: true, message: 'Ожидайте звонка!' }));
       return 1;
@@ -24,13 +30,8 @@ export const setPhoneCode = async (phoneDigits: string, dispatch: AppDispatch): 
       dispatch(showNotification({ isGood: false, message: 'Введите корректный номер телефона!' }));
       return null;
     }
-  } catch (error: unknown) {
-    const axiosError = error as AxiosError<{ message: string }>;
-    if (axiosError.response && axiosError.response.data && axiosError.response.data.message) {
-      dispatch(showNotification({ isGood: false, message: axiosError.response.data.message }));
-    } else {
-      dispatch(showNotification({ isGood: false, message: 'Сервис временно недоступен, попробуйте позже' }));
-    }
+  } catch (error) {
+    handleError(error, dispatch, 'Сервис временно недоступен, попробуйте позже');
     return null;
   }
 };
@@ -54,20 +55,23 @@ export const setLogin = async (
 
     if (response.status === 200) {
       const token = response.data;
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("phone");
       localStorage.setItem("authToken", token);
+      localStorage.setItem("phone", phone.replace(/\D/g, '').substring(1));
+      dispatch(login({ token, phone: phone.replace(/\D/g, '').substring(1) }));
       return token;
     } else {
       dispatch(showNotification({ isGood: false, message: 'Неправильный номер телефона или пароль!' }));
       return null;
     }
-  } catch (error: unknown) {
-    const axiosError = error as AxiosError<{ message: string }>;
-    const errorMessage = axiosError.response?.data?.message || 'Сервис временно недоступен, попробуйте позже';
-    dispatch(showNotification({ isGood: false, message: errorMessage }));
+  } catch (error) {
+    handleError(error, dispatch, 'Сервис временно недоступен, попробуйте позже');
     return null;
   }
 };
 
+// Функция для проверки кода телефона
 export const checkPhoneCode = async (
   phone: string | null,
   codeFromSMS: string,
@@ -75,23 +79,22 @@ export const checkPhoneCode = async (
 ): Promise<number | null> => {
   const host = getHost();
   try {
-    const response = await axios.post(host + "/api/Authorization/check-phone-code", {
+    const response = await axios.post(`${host}/api/Authorization/check-phone-code`, {
       Phone: phone,
       Password: "",
       Code: codeFromSMS
     });
 
     if (response.status === 200) {
-      dispatch(login({ token: "", phone, code: codeFromSMS }));
+      dispatch(login({ phone: phone ?? undefined, code: codeFromSMS }));
       dispatch(showNotification({ isGood: true, message: 'Код принят' }));
       return 2; // Возвращаем номер формы для перехода
     } else {
       dispatch(showNotification({ isGood: false, message: 'Код неверный!' }));
       return null;
     }
-  } catch (error: unknown) {
-    const axiosError = error as AxiosError<{ message: string }>;
-    dispatch(showNotification({ isGood: false, message: axiosError.response!.data.message }));
+  } catch (error) {
+    handleError(error, dispatch, 'Ошибка при отправке данных');
     return null;
   }
 };
@@ -105,7 +108,7 @@ export const setPasswordAndLogin = async (
 ): Promise<boolean> => {
   const host = getHost();
   try {
-    const setPasswordResponse = await axios.post(host + "/api/Authorization/set-password", {
+    const setPasswordResponse = await axios.post(`${host}/api/Authorization/set-password`, {
       Phone: phone,
       Password: password,
       Code: code
@@ -116,7 +119,7 @@ export const setPasswordAndLogin = async (
       const authToken = await setLogin("9" + phone, password, dispatch);
 
       if (authToken) {
-        dispatch(login({ token: authToken, phone: phone, code: code }));
+        dispatch(login({ token: authToken, phone: phone ?? undefined, code: code ?? undefined }));
         dispatch(showNotification({ isGood: true, message: 'Вы успешно авторизовались!' }));
         return true; // Успешная авторизация
       } else {
@@ -125,10 +128,73 @@ export const setPasswordAndLogin = async (
     } else {
       dispatch(showNotification({ isGood: false, message: 'Ошибка при смене пароля' }));
     }
-  } catch (error: unknown) {
-    const axiosError = error as AxiosError<{ message: string }>;
-    dispatch(showNotification({ isGood: false, message: axiosError.response?.data.message || 'Ошибка при отправке данных' }));
-    console.error("Ошибка:", error);
+  } catch (error) {
+    handleError(error, dispatch, 'Ошибка при отправке данных');
   }
   return false;
+};
+
+// Функция для получения данных пользователя
+export const getUser = async (phone: string, token: string): Promise<User> => {
+  const host = getHost();
+  try {
+    const response = await axios.get<User>(`${host}/api/User/get?phone=${phone}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error : unknown) {
+    const axiosError = error as AxiosError<{ message: string }>;
+    if(axiosError.status === 401){
+      throw error;
+    }
+    throw error;
+  }
+};
+
+// Функция для изменения пароля
+export const changePassword = async (
+  oldPassword: string,
+  newPassword: string,
+  token: string,
+  dispatch: AppDispatch,
+  phone: string
+): Promise<boolean> => {
+  const host = getHost();
+
+  try {
+    const response = await axios.patch(
+      `${host}/api/Authorization/change-password`,
+      {
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+        phone: phone,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    console.log("Response received:", response); // Лог ответа
+
+    if (response.status === 200) {
+      dispatch(
+        showNotification({
+          isGood: true,
+          message: "Пароль успешно изменен!",
+        })
+      );
+      return true;
+    } else {
+      console.log("Unexpected response status:", response.status); // Лог при ошибке статуса
+      return false;
+    }
+  } catch (error) {
+    console.error("Error during password change request:", error); // Лог ошибки
+    handleError(error, dispatch, "Ошибка при отправке данных");
+    throw error;
+  }
 };

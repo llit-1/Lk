@@ -23,6 +23,7 @@ const FormLogin: React.FC<FormLoginProps> = ({ onSwitchForm }) => {
   // Очистка токена только при загрузке компонента
   React.useEffect(() => {
     localStorage.removeItem('authToken');
+    localStorage.removeItem('phone');
   }, []);
 
   // Обработка отправки формы

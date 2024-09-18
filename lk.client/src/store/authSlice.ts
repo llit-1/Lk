@@ -17,12 +17,16 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login: (state, action: PayloadAction<{ token: string, phone: string | null, code: string | null }>) => {
-      console.log(action.payload)
-      state.token = action.payload.token;
-      state.phone = action.payload.phone;
-      state.code = action.payload.code;
-      localStorage.setItem('authToken', action.payload.token); // Сохраняем токен в localStorage
+    login(state, action: PayloadAction<{ token?: string; phone?: string; code?: string }>) {
+      if (action.payload.token) {
+        state.token = action.payload.token;
+      }
+      if (action.payload.phone) {
+        state.phone = action.payload.phone;
+      }
+      if (action.payload.code) {
+        state.code = action.payload.code;
+      }
     },
     logout: (state) => {
       state.token = null;

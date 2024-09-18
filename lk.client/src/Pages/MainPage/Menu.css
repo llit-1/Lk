@@ -37,10 +37,10 @@
 
 main {
     width: 100%;
-    padding-top: 60px;
-    min-height: calc(100dvh - 25px);
+    min-height: calc(100dvh - 60px - 25px);
     background-color: #EEEEEE;
-
+    margin-bottom: 25px;
+    margin-top: 60px;
 }
 
 footer {
@@ -55,4 +55,5 @@ footer {
     font-size: 14px;
     font-weight: 400;
     color: #777777;
+    z-index: 10;
 }

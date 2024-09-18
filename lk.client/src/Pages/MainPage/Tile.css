@@ -92,5 +92,6 @@
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Устанавливаем минимальную ширину плитки */
         gap: 10px; /* Зазоры между плитками */
+        height: fit-content;
     }
 }
