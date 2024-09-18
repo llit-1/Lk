@@ -209,7 +209,7 @@ const grey = {
 const InputElement = styled('input')(
   ({ theme }) => `
   width: 50px;
-  font-family: 'Akrobat;
+  font-family: 'Akrobat';
   font-size: 0.975rem;
   font-weight: 400;
   line-height: 2.3;
