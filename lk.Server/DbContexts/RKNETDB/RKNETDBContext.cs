@@ -19,7 +19,8 @@ namespace lk.Server.DbContexts.RKNETDB
         public DbSet<DbContexts.RKNETDB.Models.JobTitle> JobTitles { get; set; } // должность
         public DbSet<DbContexts.RKNETDB.Models.Schedule> Schedules { get; set; } // типы смен
         public DbSet<DbContexts.RKNETDB.Models.Location> Locations { get; set; } // локация
-
+        public DbSet<DbContexts.RKNETDB.Models.WorkingSlots> WorkingSlots { get; set; } // слот
+        public DbSet<DbContexts.RKNETDB.Models.TimeSheets> TimeSheets { get; set; } // смена
 
     }
 }
