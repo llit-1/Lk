@@ -3,6 +3,7 @@ import { AppDispatch } from "../store/index";
 import { showNotification } from '../store/notificationSlice';
 import { login } from '../store/authSlice';
 import { User } from "../interfaces/user";
+import { ExchangeSlot } from "../interfaces/ExchangeSlot";
 
 // Получаем хоста для дев режима
 const getHost = (): string => {
@@ -196,5 +197,67 @@ export const changePassword = async (
     console.error("Error during password change request:", error); // Лог ошибки
     handleError(error, dispatch, "Ошибка при отправке данных");
     throw error;
+  }
+};
+
+
+// Функция для проверки токена
+export const checkToken = async (token: string): Promise<boolean> => {
+  const host = getHost();
+  try {
+    const response = await axios.get<boolean>(`${host}/api/Authorization/check-token`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error : unknown) {
+    const axiosError = error as AxiosError<{ message: string }>;
+    if(axiosError.status === 401){
+      throw error;
+    }
+    throw error;
+  }
+};
+
+export const getWorkingSlots = async (): Promise<ExchangeSlot[]> => {
+  const host = getHost();
+  try {
+    const response = await axios.get<ExchangeSlot[]>(`${host}/api/Slots/getall?userPhone=${localStorage.getItem("phone")}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      },
+    });
+    return response.data;
+  } catch (error : unknown) {
+    const axiosError = error as AxiosError<{ message: string }>;
+    if(axiosError.status === 401){
+      throw error;
+    }
+    throw error;
+  }
+};
+
+export const takeWorkingSlots = async (Id: number): Promise<number> => {
+  const host = getHost();
+  try {
+    const response = await axios.put<number>(`${host}/api/Slots/takesheet`, {
+      Id: Id,
+      Phone: localStorage.getItem("phone"),
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      },
+    }
+  )
+    return response.status;
+  } catch (error : unknown) {
+    const axiosError = error as AxiosError<{ message: string }>;
+    if(typeof axiosError.status == "number")
+    {
+      return axiosError.status;
+    }
+    return 400;
   }
 };

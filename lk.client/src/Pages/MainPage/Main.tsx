@@ -22,7 +22,7 @@ function Main () {
       <main>
         <Outlet />
       </main>
-      <footer>{import.meta.env.VITE_VERSION}</footer>
+      <footer>{import.meta.env.VITE_VERSION}</footer>  
     </>
       
       

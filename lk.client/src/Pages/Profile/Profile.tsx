@@ -97,6 +97,7 @@ const Profile = () => {
   let postfixyear = "";
   let postfixday = "";
   let gradeImg = "star-gray.png";
+  let message = ""
 
   if(user && user?.experience > 365)
   {
@@ -104,12 +105,25 @@ const Profile = () => {
     remainderDays = user?.experience % 365;
     postfixyear = years === 1 ? 'год' : years >= 2 && years <= 4 ? 'года' : 'лет';
     postfixday = getDayPostfix(remainderDays);
-    if (years < 3) {
-      gradeImg = "/star-green.png";
-    } else if (years >= 3 && years < 4) {
+    
+    if(years < 1 && remainderDays < 90){
+      gradeImg = "/star-gray.png";
+      message = `Привет новичек, ты с нами ${remainderDays + " " + postfixday}!`
+    }
+
+    if(years < 1 && remainderDays > 90 && remainderDays < 180){
       gradeImg = "/star-orange.png";
-    } else if (years >= 4) {
+      message = `А ты уже не зеленый, мы вместе ${remainderDays + " " + postfixday}!`
+    }
+
+    if(years < 1 && remainderDays > 180 && remainderDays < 365){
       gradeImg = "/star-red.png";
+      message = `${remainderDays + " " + postfixday} - столько прошло дней с нашего знакомства, все только впереди!`
+    }
+
+    if (years >= 1 && years < 2) {
+      gradeImg = "/star-green.png";
+      message = `Ого, ты уже ${years + " " + postfixyear} и ${remainderDays + " " + postfixday} с нами, ты настоящий профессионал своего дела!`
     }
   }
 
@@ -150,8 +164,7 @@ const Profile = () => {
             </div>
 
             <div className="congratulationText">
-              {user.experience > 365 ? `Ого, ты уже ${years + " " + postfixyear} и ${remainderDays + " " + postfixday} с нами, так держать!` : `Ого, ты уже ${<b>user.experience</b>} дней с нами, так держать!`}
-              
+              {message}
             </div>
 
           </div>

@@ -99,6 +99,7 @@
 .congratulationText {
     font-size: 22px;
     padding-bottom: 20px;
+    text-align: center;
 }
 
 .image-container::after {
@@ -191,8 +192,8 @@
 }
 
 .fullScreen {
-    width: 100%;
-    height: 100%;
+    width: 100dvw;
+    height: calc(100dvh - 60px - 25px);
     display: flex;
     justify-content: center;
     align-items: center;

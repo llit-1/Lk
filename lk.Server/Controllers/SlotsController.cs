@@ -30,7 +30,7 @@ namespace lk.Server.Controllers
             List<JsonSlot> jsonSlots = new List<JsonSlot>();
             List<WorkingSlots> workSlots = _rKNETDBContext.WorkingSlots.Include(c=>c.Locations)
                                                                        .Include(c => c.JobTitles)
-                                                                       .Where(c => c.Status == 0 && c.Begin < DateTime.Now.AddHours(-1)).ToList();
+                                                                       .Where(c => c.Status == 0 && c.Begin > DateTime.Now.AddHours(1)).ToList();
             foreach (var workSlot in workSlots)
             {
                 JsonSlot jsonSlot = new();
@@ -69,7 +69,7 @@ namespace lk.Server.Controllers
                 return BadRequest(new { message = "пользователь не найден" });
             }
             WorkingSlots workingSlot = _rKNETDBContext.WorkingSlots.FirstOrDefault(c => c.Id == takeSheetJson.Id);
-            if (workingSlot is null)
+            if (workingSlot is null || workingSlot.Status != 0)
             {
                 return BadRequest(new { message = "смена не найдена" });
             }
@@ -87,10 +87,10 @@ namespace lk.Server.Controllers
         private bool CheckShiftTimeConflict(DateTime begin, DateTime end, string userPhone)
         {
             List<WorkingSlots> userWorkSlots = _rKNETDBContext.WorkingSlots.Include(c => c.Personalities)
-                                                                          .Where(c => c.Personalities.Phone == userPhone && c.Begin < DateTime.Now.AddHours(-1))
+                                                                          .Where(c => c.Personalities.Phone == userPhone && c.Begin > DateTime.Now)
                                                                           .ToList();
             List<TimeSheets> usertimeSheets = _rKNETDBContext.TimeSheets.Include(c => c.Personalities)
-                                                                           .Where(c => c.Personalities.Phone == userPhone && c.Begin < DateTime.Now.AddHours(-1))
+                                                                           .Where(c => c.Personalities.Phone == userPhone && c.Begin > DateTime.Now)
                                                                            .ToList();
 
             foreach (var item in userWorkSlots)

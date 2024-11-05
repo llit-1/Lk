@@ -1,0 +1,311 @@
+.ExchangeWrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.ExchangeHeader {
+    padding: 20px 10px 10px 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.ExchangeHeader_Button {
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f47920;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s linear;
+}
+
+.ExchangeHeader_Button:hover {
+    background-color: #cf671c;
+}
+
+.ExchangeHeader_Select {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #00000024;
+}
+
+.ExchangeCards {
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    padding: 10px;
+    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 10px;
+    height: fit-content;
+}
+
+.slot {
+    width: 100%;
+    background-color: rgb(201 201 201 / 43%);
+    height: fit-content;
+    border: 1px solid #00000024;
+    border-radius: 8px;
+    box-shadow: 3px 3px 1px 0px rgba(0, 0, 0, 0.2);
+}
+
+.slot_info {
+    padding-top: 7px;
+    padding-left: 10px;
+    padding-bottom: 7px;
+}
+
+.slot_title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 10px;
+}
+
+.slot_title_extra {
+    border-left: 1px solid #00000024;
+    border-bottom: 1px solid #00000024;
+    border-bottom-left-radius: 13px;
+}
+
+.slot_title_extra > img {
+    width: 30px;
+    padding: 2px;
+}
+
+.slot_price {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    font-size: 18px;
+    color: #22b745;
+}
+
+.slot_button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.slot_button > button {
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f47920;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s linear;
+}
+
+.slot_button > button:hover {
+    background-color: #cf671c;
+}
+
+.slot_bottom {
+    padding-top: 7px;
+    padding-left: 10px;
+    padding-bottom: 7px;
+    display: flex;
+    justify-content: space-between;
+    padding-right: 10px;
+}
+
+.slot_title {
+    font-weight: 600;
+    font-size: large;
+}
+
+.slot_info_date {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.slot_info_date p {
+    font-weight: 600;
+}
+
+@media screen and (max-width: 670px){
+    .ExchangeHeader_autocomplete {
+        width: 100% !important;
+    }
+}
+
+.ExchangeLocations {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    padding: 10px;
+    gap: 10px
+}
+
+.ExchangeLocations_Card {
+    padding: 10px;
+    font-size: 18px;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 5px;
+    border: 1px solid #00000024;
+    align-items: center;
+}
+
+.ExchangeLocations_Card > label {
+    width: 100%;
+    height: 100%;
+}
+
+.ExchangeLocations_Card > input {
+    width: 18px;
+    height: 18px;
+    border: 1px solid #00000024;
+}
+
+.nullSlots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.ExchangeLocations_InputSearch {
+    border: 1px solid #00000024;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 5px 0px;
+}
+
+.ExchangeSlots_Modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid #00000024;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 11px 15px -7px, rgba(0, 0, 0, 0.14) 0px 24px 38px 3px, rgba(0, 0, 0, 0.12) 0px 9px 46px 8px;
+    padding: 10px;
+    font-family: 'Akrobat';
+}
+
+.ExchangeSlots_Modal_p {
+    color: #22b745;
+    font-weight: 600;
+
+}
+
+.ExchangeSlots_Modal_Data {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #f4792026;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.ExchangeSlots_Modal_Header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0px 15px 0px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.ExchangeSlots_Modal_HandlerCost {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.ExchangeSlots_Modal_HandlerButton {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 15px;
+}
+
+.ExchangeSlots_Modal_ButtonOk {
+    border: none;
+    padding: 0px 10px;
+    border-radius: 5px;
+    background-color: #3cc978;
+    color: white;
+    cursor: pointer;
+    height: 35px;
+}
+
+.ExchangeSlots_Modal_ButtonCancel {
+    border: none;
+    padding: 0px 10px;
+    border-radius: 5px;
+    background-color: #E74C3C;
+    color: white;
+    cursor: pointer;
+    height: 35px;
+}
+
+.ExchangeSlots_Modal_Loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+}
+
+.ExchangeSlots_Modal_Result {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.ExchangeSlots_Modal_Result > img {
+    width: 20vh;
+}
+
+.ExchangeSlots_Modal_Result > p {
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.disabled {
+    background-color: rgb(163 163 163 / 33%);
+    cursor: not-allowed;
+}
+
+button:disabled {
+    background-color: rgb(163 163 163 / 71%);
+    cursor: not-allowed;
+    transition: all 0.3s linear;
+}
+
+button:hover:disabled {
+    background-color: rgb(163 163 163 / 71%);
+    cursor: not-allowed;
+}
+
+.text-disabled {
+    color: rgb(163 163 163 / 71%);
+}
+
+@media screen and (min-width: 670px){
+    .ExchangeSlots_Modal {
+        width: 70vw;
+    }
+}
+
+
+@media screen and (min-width: 1300px){
+    .ExchangeSlots_Modal {
+        width: 25vw;
+    }
+}
+
+.ExchangeHeader_SelectFilters {
+    width: fit-content;
+}

@@ -2,7 +2,7 @@ export interface User {
     surname: string;
     name: string;
     patronymic: string;
-    birthday: string;  // Если дата приходит в виде строки
+    birthday: string;
     jobTitle: string;
     location: string;
     scheduleStart: string;
