@@ -135,6 +135,31 @@ namespace lk.Server.Controllers
             return BadRequest(new { message = "конфликт рабочего времени" });
         }
 
+        [HttpPut("dropsheet")]
+        [Authorize]
+        public IActionResult DropSheet([FromBody] TakeSheetJson takeSheetJson)
+        {
+            if (takeSheetJson == null || takeSheetJson.Id == null || takeSheetJson.Phone == null)
+            {
+                return BadRequest(new { message = "unavailable data" });
+            }
+            Personality personality = _rKNETDBContext.Personalities.FirstOrDefault(c => c.Phone == takeSheetJson.Phone);
+            if (personality is null)
+            {
+                return BadRequest(new { message = "пользователь не найден" });
+            }
+            WorkingSlots workingSlot = _rKNETDBContext.WorkingSlots.FirstOrDefault(c => c.Id == takeSheetJson.Id);
+            if (workingSlot is null || workingSlot.Status != 1)
+            {
+                return BadRequest(new { message = "смена не найдена" });
+            }
+                workingSlot.Personalities = null;
+                workingSlot.Status = 0;
+                _rKNETDBContext.SaveChanges();
+            return Ok();
+        }
+
+
 
         private bool CheckShiftTimeConflict(DateTime begin, DateTime end, string userPhone)
         {
