@@ -112,17 +112,22 @@ const Profile = () => {
     }
 
     if(years < 1 && remainderDays > 90 && remainderDays < 180){
-      gradeImg = "/star-orange.png";
+      gradeImg = "/star-green.png";
       message = `А ты уже не зеленый, мы вместе ${remainderDays + " " + postfixday}!`
     }
 
     if(years < 1 && remainderDays > 180 && remainderDays < 365){
-      gradeImg = "/star-red.png";
+      gradeImg = "/star-orange.png";
       message = `${remainderDays + " " + postfixday} - столько прошло дней с нашего знакомства, все только впереди!`
     }
 
     if (years >= 1 && years < 2) {
-      gradeImg = "/star-green.png";
+      gradeImg = "/star-red.png";
+      message = `Ого, ты уже ${years + " " + postfixyear} и ${remainderDays + " " + postfixday} с нами, ты настоящий профессионал своего дела!`
+    }
+
+    if (years >= 2) {
+      gradeImg = "/star-red.png";
       message = `Ого, ты уже ${years + " " + postfixyear} и ${remainderDays + " " + postfixday} с нами, ты настоящий профессионал своего дела!`
     }
   }

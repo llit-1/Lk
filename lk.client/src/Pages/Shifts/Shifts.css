@@ -36,7 +36,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding-bottom: 10px;
+    padding: 0px 10px 10px 10px;
 }
 
 .shiftList_Card {
@@ -48,14 +48,6 @@
     border-radius: 16px;
 }
 
-.tableWrapper {
-    background-color: #ffffff;
-    width: 100%;
-    height: 100%;
-    gap: 8px;
-    border-radius: 16px;
-}
-
 .shiftWrapper_statistic_value {
     width: 80px;
     text-align: end;
@@ -63,13 +55,14 @@
     display: flex;
     justify-content: end;
     align-items: center;
+    font-weight: 800;
 }
 
 .shiftWrapper_statistic_label {
     display: flex;
     justify-content: start;
     align-items: center;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .shiftList_Card {
@@ -92,14 +85,38 @@
     padding: 5px 8px;
     color: white;
     border-radius: 8px;
+    display: flex;
+    flex-direction: row;
 }
 
 .Card_title_bold {
-    font-weight: 600;
+    font-weight: 800;
     font-size: 18px;
 }
 
-@media screen and (min-width: 890px){
+.Card_title_cancel {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.title_status_cancelled {
+    padding: 5px 8px;
+    color: #ff000075;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: row;
+    background-color: #d8d8d8;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media screen and (min-width: 1200px){
     .shiftWrapper_statistic {
         height: 120px;
         flex-direction: row;
@@ -107,6 +124,129 @@
         background-color: transparent;
     }
     
+}
+
+
+@media screen and (min-width: 450px) and (max-width: 1199px){
+    .shiftWrapper_shiftList {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Устанавливаем минимальную ширину плитки */
+        gap: 10px;
+        height: fit-content;
+    }
+}
+
+.shiftModalWrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid #00000024;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 11px 15px -7px, rgba(0, 0, 0, 0.14) 0px 24px 38px 3px, rgba(0, 0, 0, 0.12) 0px 9px 46px 8px;
+    padding: 10px;
+    font-family: 'Akrobat';
+}
+
+/* Версия страницы для ПК */
+@media screen and (min-width: 1200px) {
+    .shiftWrapper {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        height: 100%;
+        gap: 10px;
+    }
+
+    .shiftWrapper_statistic {
+        width: 100%;
+        gap: 10px;
+        padding: 10px 0px 0px 10px;
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        height: fit-content;
+    }
+
+    .shiftWrapper_statistic div {
+        height: 90px;
+    }
+
+    .shiftWrapper_shiftList {
+        width: 100%;
+    }
+
+    .tableWrapper {
+        box-shadow: 0 8px 10px #0000001f;
+    }
+
+    .tableWrapper_body {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        border-bottom: 1px solid #DCDEE0;
+        font-size: 18px;
+        padding: 16px;
+    }
+
+    .tableWrapper_body:last-child {
+        border-radius: 0px 0px 16px 16px;
+    }
+
+    .tableWrapper_body_status {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .tableWrapper_body_status_title {
+        background-color: rgb(203, 217, 21);
+        padding: 10px;
+        border-radius: 8px;
+    }
+
+    .tableWrapper_body_status_button {
+        color:#EA7575;
+        cursor: pointer;
+        transition: all 0.3s linear;
+    }
+
+    .tableWrapper_body_status_button:hover {
+        color:#e63131;
+    }
+
+    .shiftModalWrapper {
+        width: 40%;
+    }
+    
+    .shiftModalWrapper_Buttons > button {
+        transition: all 0.3s linear;
+    }
+
+    .shiftModalWrapper_Buttons > button:hover {
+        cursor: pointer;
+    }
+
+    .shiftModalWrapper_Buttons_cancelled:hover {
+        background-color: #b31919;
+    }
+
+    .shiftModalWrapper_Buttons_closeWindow:hover {
+        background-color: #d6d6d6;
+    }
+}
+
+
+.tableWrapper {
+    background-color: #ffffff;
+    width: 100%;
+    height: 100%;
+    gap: 8px;
+    border-radius: 16px;
 }
 
 .tableWrapper_header_title {
@@ -119,15 +259,7 @@
     padding: 16px;
 }
 
-.tableWrapper_body {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    border-bottom: 1px solid #DCDEE0;
-    border-radius: 0px;
-    font-size: 18px;
-    padding: 16px;
-}
+
 
 .tableWrapper_body_backgroudRed {
     background-color: #FFEEE3;
@@ -161,6 +293,14 @@
 .Card_details {
     display: flex;
     flex-direction: column;
+    gap: 6px;
+}
+
+.Card_details > span {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
 }
 
 .Card_details_p {
@@ -170,4 +310,143 @@
     height: fit-content;
     padding: 5px 8px;
     border-radius: 8px;
+}
+
+
+.shiftList_buttonAdd_wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 10px;
+}
+
+.shiftList_Card_buttonAdd {
+    justify-content: center;
+    align-items: center;
+    background-color: #F47920;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s linear;
+}
+
+div.shiftList_Card_buttonAdd:hover {
+    background-color: #F47920 !important;
+    color: white !important;
+}
+
+.shiftModalWrapper_pickDate {
+    border-radius: 5px;
+    padding: 10px;
+    height: fit-content;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.pickDate_month {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 15px;
+    padding: 0px 10px;
+}
+
+.pickDate_month > input {
+    padding: 10px;
+    border: none;
+    font-family: 'AKROBAT';
+    font-size: 16px;
+    width: 100%;
+    border-radius: 8px;
+}
+
+.pickDate_month > label {
+    font-weight: 800;
+}
+
+.shiftModalWrapper_pickDate > button {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    background-color: #F47920;
+    font-family: 'AKROBAT';
+}
+
+.shiftWrapperModal {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 15px;
+}
+
+.shiftModalWrapper_title {
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.shiftModalWrapper_Buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.shiftModalWrapper_Buttons > button {
+    padding: 8px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Akrobat';
+    font-size: 14px;
+}
+
+.shiftModalWrapper_Buttons_cancelled {
+    background-color: #ff4747;
+    color: white;
+}
+
+.shiftModalWrapper_body {
+    text-align: center;
+}
+
+.shift_noData {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 40px;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.shift_noData > span {
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.shift_noData > button {
+    font-family: "AKROBAT";
+    padding: 12px;
+    color: white;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    background-color: #F47920;
+    cursor: pointer;
+    transition: all 0.3s linear;
+}
+
+.shift_noData > button:hover {
+    background-color: #c45e16;
 }

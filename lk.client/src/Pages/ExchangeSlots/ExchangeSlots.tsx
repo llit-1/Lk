@@ -11,7 +11,7 @@ const ExchangeSlots = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [exchangeSlot, setExchangeSlot] = useState<ExchangeSlot[]>([]);
   const [stockExchangeSlot, setStockExchangeSlot] = useState<ExchangeSlot[]>([]);
-  const [buttonText, setButtonText] = useState<string>("Выбрать точку");
+  const [buttonText, setButtonText] = useState<boolean>(true);
   const [viewLocation, setViewLocation] = useState<boolean>(false);
   const [buttonActionSaveLocation, setButtonActionSaveLocation] = useState<boolean>(false);
   const [pickedLocation, setPickedLocation] = useState<string[]>([]);
@@ -55,7 +55,7 @@ const ExchangeSlots = () => {
     if (buttonActionSaveLocation) {
       setLoading(true);
       setViewLocation(false);
-      setButtonText("Выбрать точку");
+      setButtonText(true);
       setExchangeSlot(
         pickedLocation.length === 0
           ? stockExchangeSlot
@@ -66,7 +66,7 @@ const ExchangeSlots = () => {
     } else {
       setUniqueLocations(Array.from(new Map(stockExchangeSlot.map((item) => [item.locations.guid, item])).values()));
       setViewLocation(true);
-      setButtonText("Применить");
+      setButtonText(false);
       setButtonActionSaveLocation(true);
     }
   };

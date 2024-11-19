@@ -45,6 +45,9 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({ value, onChange }) 
       size="medium"
       inputRef={inputRef}
       onChange={handleChange}
+      slotProps={{
+        inputLabel: { shrink: Boolean(value) }
+      }}
       value={value} // Передаем значение из родительского компонента
       sx={{
         '& .MuiOutlinedInput-root': { 

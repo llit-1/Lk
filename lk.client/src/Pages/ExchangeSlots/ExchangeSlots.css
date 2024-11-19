@@ -2,22 +2,28 @@
     width: 100%;
     display: flex;
     flex-direction: column;
+    height: 100%;
 }
 
 .ExchangeHeader {
-    padding: 20px 10px 10px 10px;
+    padding: 10px;
     display: flex;
     justify-content: space-between;
 }
 
 .ExchangeHeader_Button {
     border: none;
-    padding: 10px;
     border-radius: 5px;
     background-color: #f47920;
     color: white;
     cursor: pointer;
     transition: all 0.3s linear;
+    height: 50px;
+    width: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .ExchangeHeader_Button:hover {
@@ -34,12 +40,12 @@
     width: 100%;
     display: flex;
     justify-content: start;
-    padding: 10px;
+    padding: 0px 10px 10px 10px;
     flex-direction: column;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 10px;
-    height: fit-content;
+    height: 100%;
 }
 
 .slot {
@@ -139,7 +145,7 @@
     flex-direction: column;
     justify-content: center;
     width: 100%;
-    padding: 10px;
+    padding: 0px 10px 10px 10px;
     gap: 10px
 }
 
@@ -171,12 +177,36 @@
     font-size: 18px;
 }
 
-.ExchangeLocations_InputSearch {
+.ExchangeLocations_InputSearchContainer {
+    display: flex;
+    align-items: center;
     border: 1px solid #00000024;
     padding: 10px;
     border-radius: 5px;
-    margin: 5px 0px;
-}
+    margin: 5px 0;
+    background-color: white;
+  }
+  
+  .ExchangeLocations_InputIcon {
+    display: flex;
+    align-items: center;
+    margin-right: 8px;
+  }
+
+  .ExchangeLocations_InputField {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    height: 24px;
+  }
+  
+  .ExchangeLocations_InputField input {
+    border: none;
+    outline: none;
+    width: 100%;
+    padding: 0;
+  }
 
 .ExchangeSlots_Modal {
     position: absolute;
@@ -293,6 +323,19 @@ button:hover:disabled {
     color: rgb(163 163 163 / 71%);
 }
 
+@media screen and (min-width: 670px) and (max-width: 900px){
+    .ExchangeCards_emptyList {
+        padding-top: 25%;
+    }
+}
+
+@media screen and (max-width: 669px){
+    .ExchangeCards_emptyList {
+        padding-top: 30%;
+    }
+}
+
+
 @media screen and (min-width: 670px){
     .ExchangeSlots_Modal {
         width: 70vw;
@@ -304,8 +347,35 @@ button:hover:disabled {
     .ExchangeSlots_Modal {
         width: 25vw;
     }
+
+    .ExchangeCards_emptyList {
+        padding-top: 10%;
+    }
+}
+
+@media screen and (min-width: 900px) and (max-width: 1300px){
+    .ExchangeCards_emptyList {
+        padding-top: 20%;
+    }
 }
 
 .ExchangeHeader_SelectFilters {
     width: fit-content;
+}
+
+.ExchangeCards_emptyList {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+}
+
+.ExchangeCards_emptyList > svg > path {
+    fill: #f479206b;
+}
+
+.emptyList_p {
+    font-size: 22px;
+    font-weight: 800;
+    padding: 20px 0px;
 }

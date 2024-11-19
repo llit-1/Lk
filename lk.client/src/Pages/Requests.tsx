@@ -4,6 +4,10 @@ import { showNotification } from '../store/notificationSlice';
 import { login } from '../store/authSlice';
 import { User } from "../interfaces/user";
 import { ExchangeSlot } from "../interfaces/ExchangeSlot";
+import { FutureSlots } from "../interfaces/FutureSlots";
+import { Statistic } from "../interfaces/Statistic";
+
+
 
 // Получаем хоста для дев режима
 const getHost = (): string => {
@@ -244,6 +248,105 @@ export const takeWorkingSlots = async (Id: number): Promise<number> => {
     const response = await axios.put<number>(`${host}/api/Slots/takesheet`, {
       Id: Id,
       Phone: localStorage.getItem("phone"),
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      },
+    }
+  )
+    return response.status;
+  } catch (error : unknown) {
+    const axiosError = error as AxiosError<{ message: string }>;
+    if(typeof axiosError.status == "number")
+    {
+      return axiosError.status;
+    }
+    return 400;
+  }
+};
+
+
+export const getFutureUserSheets = async (): Promise<FutureSlots[] | number> => {
+  const host = getHost();
+  try {
+    const response = await axios.get<FutureSlots[]>(`${host}/api/Slots/getfutureusersheets?phone=` + localStorage.getItem("phone"),
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      },
+    }
+  )
+    return response.data;
+  } catch (error : unknown) {
+    const axiosError = error as AxiosError<{ message: string }>;
+    if(typeof axiosError.status == "number")
+    {
+      return axiosError.status;
+    }
+    return 400;
+  }
+};
+
+export const getPastUserSheets = async (Year : string, Month: string): Promise<FutureSlots[] | number> => {
+  const host = getHost();
+  try {
+    const response = await axios.patch<FutureSlots[]>(`${host}/api/Slots/getoldusersheets`,
+    {
+      Phone: localStorage.getItem("phone"),
+      Year: Year,
+      Month: Month
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      },
+    }
+  )
+    return response.data;
+  } catch (error : unknown) {
+    const axiosError = error as AxiosError<{ message: string }>;
+    if(typeof axiosError.status == "number")
+    {
+      return axiosError.status;
+    }
+    return 400;
+  }
+};
+
+export const getStatistic = async (Year : string, Month: string): Promise<Statistic | number> => {
+  const host = getHost();
+  try {
+    const response = await axios.patch<Statistic>(`${host}/api/Slots/getstatistic`,
+    {
+      Phone: localStorage.getItem("phone"),
+      Year: Year,
+      Month: Month
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      },
+    }
+  )
+    return response.data;
+  } catch (error : unknown) {
+    const axiosError = error as AxiosError<{ message: string }>;
+    if(typeof axiosError.status == "number")
+    {
+      return axiosError.status;
+    }
+    return 400;
+  }
+};
+
+export const dropSheet = async (id : number): Promise<number> => {
+  const host = getHost();
+  try {
+    const response = await axios.put<number>(`${host}/api/Slots/dropsheet`,
+    {
+      Id: id,
+      Phone: localStorage.getItem("phone")
     },
     {
       headers: {

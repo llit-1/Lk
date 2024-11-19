@@ -65,6 +65,9 @@ const FormLogin: React.FC<FormLoginProps> = ({ onSwitchForm }) => {
         label="Пароль"
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
         variant="outlined"
+        slotProps={{
+          inputLabel: { shrink: Boolean(password) }
+        }}
         size="medium"
         sx={{
           '& .MuiOutlinedInput-root': { borderRadius: 0 },

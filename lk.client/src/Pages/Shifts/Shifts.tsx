@@ -1,98 +1,130 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Shifts.css';
+// import ShiftsModal from "./ShiftsModal";
+import {ShiftsStatistics} from "./ShiftsStatistics";
+import ShiftTable from "./ShiftTable";
+import ShiftCardList from "./ShiftCardList";
+import HistoryButton from "./HistoryButton";
+import { getFutureUserSheets, getPastUserSheets, getStatistic } from "../Requests";
+import { FutureSlots } from "../../interfaces/FutureSlots";
 
 const Shifts = () => {
+  
   const [isTable, setIsTable] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [widthWindow, setWidthWindow] = useState<number>(window.innerWidth);
-  const array = [1, 2, 3, 4, 5, 31, 13, 6, 7, 18, 29, 10, 11, 12];
+  const [array, setArray] = useState<FutureSlots[]>([]);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [date, setDate] = useState<string>(new Date().toISOString().substring(0, 7));
+
+  const [buttonColor, setButtonColor] = useState<string>("#DEDEDE")
+
+  const [completedSheets, setCompletedSheets] = useState<number>(0)
+  const [cancelledSheets, setCancelledSheets] = useState<number>(0)
+  const [houseWorked, setHouseWorked] = useState<number>(0)
+
+  const fetchPastSlots = async (selectedDate: string) => {
+    setIsLoaded(true);
+    try {
+      const year = selectedDate.split("-")[0];
+      const month = selectedDate.split("-")[1];
+      const dataPast = await getPastUserSheets(year, month);
+      if (typeof dataPast === "number") {
+        console.error("Ошибка при получении данных:", dataPast);
+      } else {
+        setArray([...dataPast]);
+      }
+    } finally {
+      setIsLoaded(false);
+      setButtonColor("#F47920")
+    }
+  };
+
+  const fetchData = async () => {
+    setArray([]);
+    setButtonColor("#DEDEDE")
+    const dataFuture = await getFutureUserSheets();
+    if (typeof dataFuture === "number") {
+      console.error("Ошибка при получении данных:", dataFuture);
+    } else if (dataFuture.length > 0) {
+      setArray(dataFuture);
+    } 
+  };
+
+  const fetchStatistic = async () => {
+    const year = date.split("-")[0];
+    const month = date.split("-")[1];
+
+    const result = await getStatistic(year, month)
+    
+    if(typeof result !== "number")
+    {
+      setCompletedSheets(result.completedSheets)
+      setCancelledSheets(result.cancelledSheets)
+      setHouseWorked(result.houseWorked)
+    }
+  }
+
+  const onClickHandler = () => {
+    if(buttonColor === "#DEDEDE")
+    {
+      fetchPastSlots(date)
+    } else {
+      fetchData()
+    }
+  }
 
   useEffect(() => {
-    const handleResize = () => {
+    fetchData();
+    fetchStatistic();
+
+      const handleResize = () => {
+      console.log(widthWindow)
       setWidthWindow(window.innerWidth);
-      setIsTable(window.innerWidth >= 890);
+      setIsTable(window.innerWidth >= 1200);
     };
-    
-    // Устанавливаем первоначальное значение
     handleResize();
-
-    // Добавляем слушатель событий
     window.addEventListener('resize', handleResize);
-
-    // Удаляем слушатель при размонтировании компонента
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+
+  useEffect(() => {
+    fetchStatistic();
+  }, [date])
+
+  const dateChanger = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newDate = e.target.value;
+    setDate(newDate);
+  
+    const currentMonth = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}`;
+
+    if (newDate === currentMonth) {
+      fetchData();
+    } else {
+      setArray([]);
+      fetchPastSlots(newDate);
+    }
+  };
+  
+
   return (
     <div className="shiftWrapper">
-      <div className="shiftWrapper_statistic">
-        <div>
-          <span className="shiftWrapper_statistic_label">Выполненные смены:</span>
-          <span className="shiftWrapper_statistic_value">197</span>
-        </div>
-        <div>
-          <span className="shiftWrapper_statistic_label">Отмененные смены:</span>
-          <span className="shiftWrapper_statistic_value">3</span>
-        </div>
-        <div>
-          <span className="shiftWrapper_statistic_label">Сумма за выполненные смены (последние 30 дней):</span>
-          <span className="shiftWrapper_statistic_value">17640 ₽</span>
-        </div>
-        <div>
-          <span className="shiftWrapper_statistic_label">Сумма за выполненные смены (всего):</span>
-          <span className="shiftWrapper_statistic_value">289 590 ₽</span>
-        </div>
+      <ShiftsStatistics completedSheets={completedSheets} cancelledSheets={cancelledSheets} houseWorked={houseWorked} />
+
+      <div className="pickDate_month">
+        <input type="month" value={date} onChange={(e) => dateChanger(e)} />
       </div>
+
+      <HistoryButton isLoaded={isLoaded} color={buttonColor} onClick={() => onClickHandler()} />
 
       <div className="shiftWrapper_shiftList">
-        {isTable ? (
-          <div className="tableWrapper">
-            <div className="tableWrapper_header">
-              <div className="tableWrapper_header_title" style={{ width: '10%', textAlign: 'center' }}>Дата</div>
-              <div className="tableWrapper_header_title" style={{ width: '25%', textAlign: 'center' }}>ТТ</div>
-              <div className="tableWrapper_header_title" style={{ width: '20%', textAlign: 'center' }}>Должность</div>
-              <div className="tableWrapper_header_title" style={{ width: '15%', textAlign: 'center' }}>Время</div>
-              <div className="tableWrapper_header_title" style={{ width: '15%', textAlign: 'center' }}>Стоимость</div>
-              <div className="tableWrapper_header_title" style={{ width: '15%', textAlign: 'center' }}>Статус</div>
-            </div>
-            {array.map((item, index) => (
-              <div key={item} className={`tableWrapper_body ${index % 2 === 0 ? '' : 'tableWrapper_body_backgroudRed'}`}>
-                <div style={{ width: '10%', textAlign: 'center' }}>05.11.2024</div>
-                <div style={{ width: '25%', textAlign: 'center' }}>Тестовая точка</div>
-                <div style={{ width: '20%', textAlign: 'center' }}>Вечерний продавец</div>
-                <div style={{ width: '15%', textAlign: 'center' }}>08:00 - 17:00</div>
-                <div style={{ width: '15%', textAlign: 'center' }}>1230 ₽</div>
-                <div style={{ width: '15%', textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                  <div className={`tableWrapper_body_status ${index % 2 === 0 ? 'status_green' : 'status_red'}`}>
-                    {index % 2 === 0 ? 'Выполнено' : 'Отменено'}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          array.map((item) => (
-                <div className="shiftList_Card" key={item}>
-                <div className="shiftList_Card_title">
-                    <span className="Card_title_bold">05.11.2024</span>
-                    <span className="Card_title_status"> Выполнено </span>
-                </div>
-
-                <div className='shiftList_Card_detailsWrapper'>
-                    <div className='Card_details'>
-                        <span>Торговая точка: Тестовая точка</span>
-                        <span>Время смены: 08:00 - 17:00</span>
-                        <span>Должность: Вечерний продавец</span>
-                    </div>
-
-                <p className="Card_title_bold Card_details_p">1230 ₽</p>
-                </div>
-            </div>
-          ))
-        )}
+        {isTable ? <ShiftTable data={array} fetchData={fetchData} fetchStatistic={fetchStatistic} /> : <ShiftCardList data={array} fetchData={fetchData} fetchStatistic={fetchStatistic} />}
       </div>
+      
+      {/* <ShiftsModal open={modalOpen} handleClose={() => setModalOpen(false)} date={date} setDate={setDate}/> */}
     </div>
   );
 };
 
 export default Shifts;
- 

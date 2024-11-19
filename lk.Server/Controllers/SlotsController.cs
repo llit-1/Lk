@@ -3,6 +3,8 @@ using lk.Server.DbContexts.RKNETDB.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
+using static lk.Server.Controllers.SlotsController;
 
 namespace lk.Server.Controllers
 {
@@ -47,27 +49,29 @@ namespace lk.Server.Controllers
         }
 
         [HttpPatch("getoldusersheets")]
-        //[Authorize]
+        [Authorize]
         public IActionResult GetOldUserSheets([FromBody] GetUsersSheetsJson getUsersSheetsJson)
         {
-            if (getUsersSheetsJson == null || getUsersSheetsJson.Phone == null || getUsersSheetsJson.Year == null || getUsersSheetsJson.Mounth == null)
+            if (getUsersSheetsJson == null || getUsersSheetsJson.Phone == null || getUsersSheetsJson.Year == null || getUsersSheetsJson.Month == null)
             {
                 return BadRequest(new { message = "unavailable data" });
             }
             try
             {
-                DateTime begin = new DateTime(getUsersSheetsJson.Year.Value, getUsersSheetsJson.Mounth.Value, 1);
-                DateTime end = new DateTime(getUsersSheetsJson.Year.Value, getUsersSheetsJson.Mounth.Value + 1, 1);
+                DateTime begin = new DateTime(getUsersSheetsJson.Year.Value, getUsersSheetsJson.Month.Value, 1);
+                DateTime end = new DateTime(getUsersSheetsJson.Year.Value, getUsersSheetsJson.Month.Value + 1, 1);
                 List<WorkingSlots> workingSlots = _rKNETDBContext.WorkingSlots.Include(c => c.Personalities)
                                                                               .Include(c => c.Locations)
                                                                               .Include(c => c.JobTitles)
                                                                               .Where(c => c.Personalities.Phone == getUsersSheetsJson.Phone && c.Status != 1 && c.Begin >= begin && c.End < end)
                                                                               .ToList();
+
                 List<TimeSheets> timeSheets = _rKNETDBContext.TimeSheets.Include(c => c.Personalities)
                                                                         .Include(c => c.Location)
                                                                         .Include(c => c.JobTitle)
                                                                         .Where(c => c.Personalities.Phone == getUsersSheetsJson.Phone && c.Begin >= begin && c.End < end && c.Begin < DateTime.Now)
                                                                         .ToList();
+
                 return Ok(CompleeteGetUsersSheetsResponse(workingSlots, timeSheets));
             }
             catch (Exception ex)
@@ -78,7 +82,7 @@ namespace lk.Server.Controllers
         }
 
         [HttpGet("getfutureusersheets")]
-       // [Authorize]
+        [Authorize]
         public IActionResult GetFutureUserSheets(string phone)
         {
             if (phone == null)
@@ -104,8 +108,6 @@ namespace lk.Server.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
-
-
 
         [HttpPut("takesheet")]
         [Authorize]
@@ -159,8 +161,6 @@ namespace lk.Server.Controllers
             return Ok();
         }
 
-
-
         private bool CheckShiftTimeConflict(DateTime begin, DateTime end, string userPhone)
         {
             List<WorkingSlots> userWorkSlots = _rKNETDBContext.WorkingSlots.Include(c => c.Personalities)
@@ -187,6 +187,72 @@ namespace lk.Server.Controllers
             return true;
         }
 
+        [HttpPatch("getstatistic")]
+        [Authorize]
+        public IActionResult GetStatistic([FromBody] GetUsersSheetsJson getUsersSheetsJson)
+        {
+            GetStatisticJsonResponse response = new GetStatisticJsonResponse();
+            DateTime begin = new DateTime(getUsersSheetsJson.Year.Value, getUsersSheetsJson.Month.Value, 1);
+            DateTime end = new DateTime(getUsersSheetsJson.Year.Value, getUsersSheetsJson.Month.Value + 1, 1);
+
+            List < WorkingSlots > workingSlots = _rKNETDBContext.WorkingSlots.Include(c => c.Personalities)
+                                                                              .Include(c => c.Locations)
+                                                                              .Include(c => c.JobTitles)
+                                                                              .Where(c => c.Personalities.Phone == getUsersSheetsJson.Phone && (c.Status == 4 || c.Status == 5)  && c.Begin >= begin && c.End < end)
+                                                                              .ToList();
+
+            List<TimeSheets> timeSheets = _rKNETDBContext.TimeSheets.Include(c => c.Personalities)
+                                                                    .Include(c => c.Location)
+                                                                    .Include(c => c.JobTitle)
+                                                                    .Where(c => c.Personalities.Phone == getUsersSheetsJson.Phone && c.Begin >= begin && c.End < end && c.Begin < DateTime.Now)
+                                                                    .ToList();
+
+            var a = CompleeteGetUsersSheetsResponse(workingSlots, timeSheets);
+
+            response.CompletedSheets = a.Where(x => x.Status == 5 || x.Status == 4).Count();
+            response.CancelledSheets = a.Where(x => x.Status == 2 || x.Status == 3).Count();
+
+            response.CompletedSheets += a.Where(x => x.Status == null && x.Id == null && DateTime.ParseExact(x.Date + " " + x.EndTime,"dd.MM.yyyy HH.mm",CultureInfo.InvariantCulture) < DateTime.Now).Count();
+
+            double totalHours = 0;
+
+            foreach (var shift in a)
+            {
+                if (shift.Status == null && shift.Id == null && DateTime.Parse(shift.Date) > DateTime.Now)
+                {
+                    continue;
+                }
+
+                if (shift.Status != null && shift.Id != null && (shift.Status != 5 || shift.Status != 4))
+                {
+                    continue;
+                }
+
+                var beginTimeString = shift.BeginTime.Replace(".", ":");
+                var endTimeString = shift.EndTime.Replace(".", ":");
+
+                if (TimeSpan.TryParse(beginTimeString, out TimeSpan beginTime) &&
+                    TimeSpan.TryParse(endTimeString, out TimeSpan endTime))
+                {
+                    // Если конец смены раньше начала, значит был переход через полночь
+                    if (endTime < beginTime)
+                    {
+                        endTime = endTime.Add(TimeSpan.FromHours(24)); // Добавляем 24 часа
+                    }
+
+                    // Вычисляем продолжительность смены
+                    TimeSpan duration = endTime - beginTime;
+                    totalHours += duration.TotalHours;
+                }
+            }
+
+
+            response.HouseWorked = totalHours;
+
+            return Ok(response);
+        }
+
+
         public class JsonSlot : WorkingSlots
         {
             public int Available { get; set; }
@@ -201,7 +267,7 @@ namespace lk.Server.Controllers
         {
             public string Phone { get; set; }
             public int? Year { get; set; }
-            public int? Mounth { get; set; }
+            public int? Month { get; set; }
         }
 
         public class GetUsersSheetsJsonResponse
@@ -214,6 +280,13 @@ namespace lk.Server.Controllers
             public string BeginTime { get; set; }
             public string EndTime { get; set; }
             public int? Status { get; set; }
+        }
+
+        public class GetStatisticJsonResponse
+        {
+            public int CompletedSheets { get; set; }
+            public int CancelledSheets { get; set; }
+            public double HouseWorked { get; set; }
 
         }
 
@@ -228,7 +301,7 @@ namespace lk.Server.Controllers
                 usersSheet.JobTitleName = item.JobTitles.Name;
                 usersSheet.Date = item.Begin.ToString("dd.MM.yyyy");
                 usersSheet.BeginTime = item.Begin.ToString("HH.mm");
-                usersSheet.EndTime = item.Begin.ToString("HH.mm");
+                usersSheet.EndTime = item.End.ToString("HH.mm");
                 usersSheet.Status = item.Status;
                 jsonResponse.Add(usersSheet);
             }
@@ -240,10 +313,11 @@ namespace lk.Server.Controllers
                 usersSheet.JobTitleName = item.JobTitle.Name;
                 usersSheet.Date = item.Begin.ToString("dd.MM.yyyy");
                 usersSheet.BeginTime = item.Begin.ToString("HH.mm");
-                usersSheet.EndTime = item.Begin.ToString("HH.mm");
+                usersSheet.EndTime = item.End.ToString("HH.mm");
                 jsonResponse.Add(usersSheet);
             }
-            return jsonResponse;
+
+            return jsonResponse.OrderByDescending(x => x.Date).ToList();
         }
     }
 }

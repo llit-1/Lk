@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -12,8 +12,28 @@ interface HeaderMainPageProps {
 const HeaderMainPage: React.FC<HeaderMainPageProps> = ({ toggleDrawer }) => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+  const profileButtonRef = useRef<HTMLLIElement | null>(null);
 
-  const handleMenuToggle = () => setMenuOpen(!menuOpen);
+  const handleMenuToggle = () => setMenuOpen((prev) => !prev);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node) &&
+        profileButtonRef.current &&
+        !profileButtonRef.current.contains(event.target as Node)
+      ) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <header className='main_header'>
@@ -24,20 +44,25 @@ const HeaderMainPage: React.FC<HeaderMainPageProps> = ({ toggleDrawer }) => {
         <li className='header_li_title' onClick={() => navigate("/Main/Tiles")}>
           Личный Кабинет
         </li>
-        <li className='header_li' onClick={handleMenuToggle}>
+        <li
+          className='header_li'
+          id='profileButton'
+          onClick={handleMenuToggle}
+          ref={profileButtonRef} // Добавляем реф к кнопке профиля
+        >
           <img className='header_img' src='/avatar.webp' alt='Profile' />
         </li>
       </ul>
 
       {menuOpen && (
-        <div className="account-menu">
-          <div className="account-menu-item" onClick={handleMenuToggle}>
+        <div className="account-menu" ref={menuRef}>
+          <div className="account-menu-item" onClick={() => setMenuOpen(false)}>
             <Link to="/Main/Profile" className="menu-link">
               <AccountCircleIcon className="menu-item-icon" />
               Профиль
             </Link>
           </div>
-          <div className="account-menu-item" onClick={handleMenuToggle}>
+          <div className="account-menu-item" onClick={() => setMenuOpen(false)}>
             <Link to="/Login" className="menu-link">
               <ExitToAppIcon className="menu-item-icon" />
               Выйти
