@@ -56,11 +56,23 @@ const ShiftTable: React.FC<ShiftTableProps> = ({data, fetchData, fetchStatistic}
                     <span className="Card_title_status" style={{ backgroundColor: statuses[item.status].color }}> {statuses[item.status]?.label} </span>
                     </div>
                   )
-                ) : (
-                  <div className={`tableWrapper_body_status`} style={{ backgroundColor: "green" }}>
-                    Выполнено
-                  </div>
-                )
+                
+                  ) : (
+                    (() => {
+                      const dateParts = item.date.split('.'); // Разделяем строку по точке
+                      const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`; // Формат YYYY-MM-DD
+                      const date = new Date(formattedDate); // Создаем объект Date
+                      return date >= new Date() ? (
+                        <div className="tableWrapper_body_status" style={{ backgroundColor: "#CBD915" }}>
+                          Ожидается
+                        </div>
+                      ) : (
+                        <div className={`tableWrapper_body_status`} style={{ backgroundColor: "green" }}>
+                          Выполнено
+                        </div>
+                      );
+                    })()
+                  )
                 }
               </div>
             </div>

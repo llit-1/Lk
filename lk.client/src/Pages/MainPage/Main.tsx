@@ -4,6 +4,7 @@ import Menu from "./Menu"
 import { useState, useCallback, useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom';
 
+
 function Main () {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -17,6 +18,7 @@ function Main () {
 
   return (
     <>
+      
       <HeaderMainPage toggleDrawer={toggleDrawer} />
       <Menu isOpen={isOpen} toggleDrawer={toggleDrawer} />
       <main>

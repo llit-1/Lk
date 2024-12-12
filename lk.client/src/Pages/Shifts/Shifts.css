@@ -205,7 +205,7 @@
 
     .tableWrapper_body_status_title {
         background-color: rgb(203, 217, 21);
-        padding: 10px;
+        padding: 5px 8px;
         border-radius: 8px;
     }
 
@@ -269,6 +269,7 @@
     color: white;
     padding: 5px 8px;
     border-radius: 8px;
+    font-size: 16px;
 }
 
 .status_red {

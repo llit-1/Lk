@@ -59,7 +59,7 @@ namespace lk.Server.Controllers
             try
             {
                 DateTime begin = new DateTime(getUsersSheetsJson.Year.Value, getUsersSheetsJson.Month.Value, 1);
-                DateTime end = new DateTime(getUsersSheetsJson.Year.Value, getUsersSheetsJson.Month.Value + 1, 1);
+                DateTime end = begin.AddMonths(1);
                 List<WorkingSlots> workingSlots = _rKNETDBContext.WorkingSlots.Include(c => c.Personalities)
                                                                               .Include(c => c.Locations)
                                                                               .Include(c => c.JobTitles)
@@ -193,7 +193,7 @@ namespace lk.Server.Controllers
         {
             GetStatisticJsonResponse response = new GetStatisticJsonResponse();
             DateTime begin = new DateTime(getUsersSheetsJson.Year.Value, getUsersSheetsJson.Month.Value, 1);
-            DateTime end = new DateTime(getUsersSheetsJson.Year.Value, getUsersSheetsJson.Month.Value + 1, 1);
+            DateTime end = begin.AddMonths(1);
 
             List < WorkingSlots > workingSlots = _rKNETDBContext.WorkingSlots.Include(c => c.Personalities)
                                                                               .Include(c => c.Locations)

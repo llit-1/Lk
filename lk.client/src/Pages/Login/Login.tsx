@@ -3,6 +3,7 @@ import "./FormLogin"
 import FormLogin from './FormLogin';
 import FormRegister from './FormRegister';
 import "./Login.css";
+import Snowfall from 'react-snowfall'
 
 function Login() {
 
@@ -10,6 +11,7 @@ function Login() {
 
     return (
         <>
+            <Snowfall changeFrequency={400} radius={[1,4]} wind={[-2,3]} rotationSpeed={[-2,2]}/>
             <header>
                 <p className='login_p' onClick={() => setIsLoginForm(0)}>
                     <img src="/logo-big.svg" alt="Logo" />
