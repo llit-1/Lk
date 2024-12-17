@@ -76,10 +76,15 @@ const ShiftCardList : React.FC<ShiftCardListProps> = ({data, fetchData, fetchSta
             <p className="Card_title_bold Card_details_p">
               {
                 (() => {
-                  const endTimeHours = item.endTime === "00.00" ? 24 : +item.endTime.split(".")[0];
+                  let endTimeHours = item.endTime === "00.00" ? 24 : +item.endTime.split(".")[0];
                   const endTimeMinutes = +item.endTime.split(".")[1];
                   const beginTimeHours = +item.beginTime.split(".")[0];
                   const beginTimeMinutes = +item.beginTime.split(".")[1];
+
+                  if(endTimeHours < beginTimeHours)
+                  {
+                    endTimeHours = +endTimeHours + 24;
+                  }
               
                   const totalMinutes = ((endTimeHours - beginTimeHours) * 60) + (endTimeMinutes - beginTimeMinutes);
                   const totalHours = totalMinutes / 60;

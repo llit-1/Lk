@@ -103,7 +103,9 @@
     background-color: #f47920;
     color: white;
     cursor: pointer;
-    transition: all 0.3s linear;
+    transition: all 0.3s linear;    
+    font-family: "AKROBAT";
+    font-size: 14px;
 }
 
 .slot_button > button:hover {

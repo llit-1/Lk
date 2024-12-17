@@ -96,11 +96,13 @@ namespace lk.Server.Controllers
                                                                           .Include(c => c.JobTitles)
                                                                           .Where(c => c.Personalities.Phone == phone && (c.Status == 1))
                                                                           .ToList();
+
                 List<TimeSheets> timeSheets = _rKNETDBContext.TimeSheets.Include(c => c.Personalities)
                                                                         .Include(c => c.Location)
                                                                         .Include(c => c.JobTitle)
                                                                         .Where(c => c.Personalities.Phone == phone && c.Begin > DateTime.Now)
                                                                         .ToList();
+
                 return Ok(CompleeteGetUsersSheetsResponse(workingSlots, timeSheets));
             }
             catch (Exception ex)

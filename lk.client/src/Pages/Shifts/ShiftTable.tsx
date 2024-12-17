@@ -43,7 +43,25 @@ const ShiftTable: React.FC<ShiftTableProps> = ({data, fetchData, fetchStatistic}
               <div style={{ width: '25%', textAlign: 'center' }}>{item.locationName}</div>
               <div style={{ width: '20%', textAlign: 'center' }}>{item.jobTitleName}</div>
               <div style={{ width: '15%', textAlign: 'center' }}>{`${item.beginTime}`} - {`${item.endTime}`}</div>
-              <div style={{ width: '15%', textAlign: 'center' }}>{(((+item.endTime.split(".")[0] - +item.beginTime.split(".")[0]) * 60) + (+item.endTime.split(".")[1] - +item.beginTime.split(".")[1])) / 60 * 210 } Р</div>
+              <div style={{ width: '15%', textAlign: 'center' }}>
+                {
+                  (() => {
+                    let endTimeHours = item.endTime === "00.00" ? 24 : +item.endTime.split(".")[0];
+                    
+                    const endTimeMinutes = +item.endTime.split(".")[1];
+                    const beginTimeHours = +item.beginTime.split(".")[0];
+                    const beginTimeMinutes = +item.beginTime.split(".")[1];
+                    if(endTimeHours < beginTimeHours)
+                    {
+                      endTimeHours = +endTimeHours + 24;
+                    }
+                    const totalMinutes = ((endTimeHours - beginTimeHours) * 60) + (endTimeMinutes - beginTimeMinutes);
+                    const totalHours = totalMinutes / 60;
+                
+                    return totalHours * 210;
+                  })()
+                } Р
+              </div>
               <div style={{ width: '15%', textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 {item.status != null ? (
                   item.status == 1 ? (
