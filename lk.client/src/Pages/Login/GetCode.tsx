@@ -99,7 +99,7 @@ const GetCode: React.FC<GetCodeProps> = ({ onSwitchForm, setGetCodeRequest }) =>
           color: "#6d6d6d", fontFamily: 'Akrobat',
         }}
       >
-        {timerForCallAgain === 0 ? "Отправить код повторно" : "Отправить код повторно " + timerForCallAgain } 
+        {timerForCallAgain === 0 ? "Запросить звонок повторно" : "Запросить звонок повторно " + timerForCallAgain } 
       </Button>
 
       <Button

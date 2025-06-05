@@ -4,6 +4,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using System.Net.Mail;
+using MailKit.Net.Smtp;
+using MailKit.Security;
+using MimeKit;
 using static lk.Server.Controllers.SlotsController;
 
 namespace lk.Server.Controllers
@@ -254,6 +258,35 @@ namespace lk.Server.Controllers
             return Ok(response);
         }
 
+        //public async Task SendEmailAsync()
+        //{
+        //    try
+        //    {
+        //        // 1. Создаём письмо
+        //        var email = new MimeMessage();
+        //        email.From.Add(MailboxAddress.Parse("kurg5250@gmail.com"));      // От кого
+        //        email.To.Add(MailboxAddress.Parse("VSKurguzov@ludilove.ru"));       // Кому
+        //        email.Subject = "Тестовое письмо";                                 // Тема письма
+        //        email.Body = new TextPart("plain") { Text = "Привет! Это письмо из .NET 7." }; // Тело письма
+
+        //        // 2. Подключаемся к почтовому серверу
+        //        using var smtp = new MailKit.Net.Smtp.SmtpClient();
+        //        await smtp.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls); // Сервер и порт
+
+        //        // 3. Авторизация
+        //        await smtp.AuthenticateAsync("kurg5250@gmail.com", "sgvp kbti imtn dgmj");
+
+        //        // 4. Отправляем письмо
+        //        await smtp.SendAsync(email);
+
+        //        // 5. Отключаемся
+        //        await smtp.DisconnectAsync(true);
+        //    } catch(Exception error)
+        //    {
+        //        Console.WriteLine(error);
+        //    }
+            
+        //}
 
         public class JsonSlot : WorkingSlots
         {

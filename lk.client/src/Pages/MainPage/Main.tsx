@@ -1,6 +1,6 @@
 import HeaderMainPage from "./HeaderMainPage"
 import "./Menu.css"
-import Menu from "./Menu"
+import Menu from "../../Components/Menu/Menu"
 import { useState, useCallback, useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom';
 

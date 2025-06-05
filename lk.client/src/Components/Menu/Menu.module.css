@@ -1,0 +1,30 @@
+.menu_wrapper {
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+}
+
+.menu_list {
+    padding: 10px;
+    font-family: 'Akrobat';
+    font-size: 16px;
+    font-weight: 600;
+    border-bottom: 1px solid rgb(211, 210, 210);
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding-left: 30px;
+    transition: background-color 0.25s ease-in-out;
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+        cursor: pointer;
+        background-color: rgba(0, 0, 0, 0.07);
+    }
+}
+
+.item_blocked {
+    background-color: rgba(0, 0, 0, 0.07);
+    cursor: not-allowed;
+}

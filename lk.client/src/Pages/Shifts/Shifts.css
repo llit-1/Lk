@@ -213,6 +213,9 @@
         color:#EA7575;
         cursor: pointer;
         transition: all 0.3s linear;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .tableWrapper_body_status_button:hover {

@@ -1,12 +1,10 @@
 import "./Tile.css";
 import { Link } from 'react-router-dom';
-import Snowfall from 'react-snowfall'
 
 const MenuTiles = () => {
   return (
     
     <div className='wrapper_tiles'>
-      <Snowfall style={{zIndex: "100"}} changeFrequency={400} radius={[1,4]} wind={[-2,3]} rotationSpeed={[-2,2]}/>
       <Link to="/Main/Shifts" className='tile new'> {/* Ссылка на страницу смен */}
         <img src='/stats.webp' alt=""/>
         <p>Мои смены</p>

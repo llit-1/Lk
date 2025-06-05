@@ -46,7 +46,7 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({ value, onChange }) 
       inputRef={inputRef}
       onChange={handleChange}
       slotProps={{
-        inputLabel: { shrink: Boolean(value) }
+        inputLabel: { shrink: true }
       }}
       value={value} // Передаем значение из родительского компонента
       sx={{

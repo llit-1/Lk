@@ -27,7 +27,7 @@ const ExchangeSlotsModal: React.FC<ExchangeSlotsModalProps> = ({ open, handleClo
 
   useEffect(() => {
     if (open) {
-      setIsBooked(null); // Сбрасываем при каждом открытии модального окна
+      setIsBooked(null);
     }
   }, [open, setIsBooked]);
 
