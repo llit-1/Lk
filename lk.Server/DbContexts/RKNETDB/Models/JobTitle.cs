@@ -7,6 +7,8 @@ namespace lk.Server.DbContexts.RKNETDB.Models
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Guid { get; set; }
+
+        [Required]
         public string Name { get; set; }
     }
 }

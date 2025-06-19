@@ -21,7 +21,7 @@ namespace lk.Server.Controllers
 
 
         [HttpGet("get")]
-        [Authorize]
+       // [Authorize]
         public IActionResult GetUser(string phone)
         {
             if (phone.IsNullOrEmpty())
@@ -34,24 +34,16 @@ namespace lk.Server.Controllers
             {
                 return BadRequest(new { message = "Пользователь не найден, обратитесь к руководителю!" });
             }
-
-            var personalityVersion = _rKNETDBContext.PersonalityVersions.Include(c => c.JobTitle)
+            var personalityVersion = _rKNETDBContext.PersonalityVersions
+                                                    .Include(c => c.JobTitle)
                                                     .Include(c => c.Schedule)
                                                     .Include(c => c.Location)
-                                                    .Include(c=> c.Entity)
+                                                    .Include(c => c.Entity)
                                                     .FirstOrDefault(c => c.Personalities == personality && c.Actual == 1);
             if (personalityVersion is null)
             {
                 return BadRequest(new { message = "отсутствует актуальная personalityVersion" });
-            }
-            if (personalityVersion.JobTitle is null)
-            {
-                return BadRequest(new { message = "отсутствует JobTitle" });
-            }
-            if (personalityVersion.Schedule is null)
-            {
-                return BadRequest(new { message = "отсутствует Schedule" });
-            }
+            }           
             if (personalityVersion.Location is null)
             {
                 return BadRequest(new { message = "отсутствует Location" });
@@ -64,12 +56,21 @@ namespace lk.Server.Controllers
             User user = new();
             user.Surname = personalityVersion.Surname;
             user.Name = personalityVersion.Name;
-            user.Patronymic = personalityVersion.Patronymic;
+            if (personalityVersion.Patronymic != null)
+            {
+                user.Patronymic = personalityVersion.Patronymic;
+            }         
             user.Birthday = DateOnly.FromDateTime(personality.BirthDate);
-            user.JobTitle = personalityVersion.JobTitle.Name;
+            if (personalityVersion.JobTitle != null)
+            {
+                user.JobTitle = personalityVersion.JobTitle.Name;
+            }            
             user.Location = personalityVersion.Location.Name;
-            user.ScheduleStart = personalityVersion.Schedule.BeginTime.ToString(@"hh\:mm");
-            user.ScheduleEnd = personalityVersion.Schedule.EndTime.ToString(@"hh\:mm");
+            if (personalityVersion.Schedule != null)
+            {
+                user.ScheduleStart = personalityVersion.Schedule.BeginTime.ToString(@"hh\:mm");
+                user.ScheduleEnd = personalityVersion.Schedule.EndTime.ToString(@"hh\:mm");
+            }
             user.Entity = personalityVersion.Entity.Name;
             user.Experience = (DateTime.Now - personalityVersion.HireDate).Days;
             return new JsonResult(user);
@@ -85,12 +86,12 @@ namespace lk.Server.Controllers
     {
         public string Surname { get; set; }
         public string Name { get; set; }
-        public string Patronymic { get; set; }
+        public string Patronymic { get; set; } = "";
         public DateOnly Birthday { get; set; }
-        public string JobTitle { get; set; }
+        public string JobTitle { get; set; } = "";
         public string Location { get; set; }
-        public string ScheduleStart { get; set; }
-        public string ScheduleEnd { get; set; }
+        public string ScheduleStart { get; set; } = "";
+        public string ScheduleEnd { get; set; } = "";
         public string Entity { get; set; }
         public int Experience { get; set; }
 

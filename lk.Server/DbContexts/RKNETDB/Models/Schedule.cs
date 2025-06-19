@@ -10,5 +10,11 @@ namespace lk.Server.DbContexts.RKNETDB.Models
         public string Name { get; set; }
         public TimeSpan BeginTime { get; set; }
         public TimeSpan EndTime { get; set; }
+
+        [Column("JobTitle")]
+        public Guid JobTitleGuid { get; set; }
+
+        [ForeignKey("JobTitleGuid")]
+        public JobTitle JobTitle { get; set; }
     }
 }

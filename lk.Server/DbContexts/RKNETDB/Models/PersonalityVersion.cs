@@ -9,8 +9,11 @@ namespace lk.Server.DbContexts.RKNETDB.Models
         public Guid Guid { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
-        public string Patronymic { get; set; }
-        public JobTitle JobTitle { get; set; }
+        public string? Patronymic { get; set; }
+        public Guid? JobTitleGuid { get; set; } // NULLable
+
+        [ForeignKey("JobTitleGuid")]
+        public JobTitle? JobTitle { get; set; } // NULLable
         public Location Location { get; set; }
         public DateTime HireDate { get; set; }
         public DateTime? DismissalsDate { get; set; }
