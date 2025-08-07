@@ -43,15 +43,15 @@ const ShiftsModal: React.FC<ShiftsModalProps> = ({ open, handleClose, id, fetchD
             {!isLoad ? (
               <>
                 <div className="shiftModalWrapper_title">
-                  Отменить смену?
+                  Отменить слот?
                 </div>
               
                 <div className="shiftModalWrapper_body">
-                  Вы уверены, что хотите отменить смену? В случае отмены ваш рейтинг будет уменьшен
+                  Вы уверены, что хотите отменить слот? В случае отмены ваш рейтинг будет уменьшен
                 </div>
 
                 <div className="shiftModalWrapper_Buttons">
-                  <button className='shiftModalWrapper_Buttons_cancelled' onClick={cancelledSheets}> Отменить смену </button>
+                  <button className='shiftModalWrapper_Buttons_cancelled' onClick={cancelledSheets}> Отменить слот </button>
                   <button className='shiftModalWrapper_Buttons_closeWindow' onClick={handleClose}> Закрыть окно </button>
                 </div>
               </>

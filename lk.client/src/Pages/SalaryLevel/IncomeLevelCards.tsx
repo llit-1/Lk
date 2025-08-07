@@ -51,7 +51,7 @@ export const IncomeLevelCards = () => {
 
             <p className='body_textmark-fullWidth'>Бонус: премия за аудиты + 10 руб. в час при стаже от 1 мес.</p>
             <div className='body_text'>
-                <b>Staff питание: макси-комбо (смены от 12 часов)</b>
+                <b>Staff питание: макси-комбо (слота от 12 часов)</b>
                 <b>медиум-комбо (смены от 8 часов)</b>
             </div>
         </div>

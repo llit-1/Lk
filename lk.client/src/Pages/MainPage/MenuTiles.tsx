@@ -7,17 +7,17 @@ const MenuTiles = () => {
     <div className='wrapper_tiles'>
       <Link to="/Main/Shifts" className='tile new'> {/* Ссылка на страницу смен */}
         <img src='/stats.webp' alt=""/>
-        <p>Мои смены</p>
+        <p>Мои слоты</p>
       </Link>
 
       <Link to="/Main/Exchange" className='tile new'> {/* Ссылка на страницу смен */}
         <img src='/exchange.webp' alt=""/>
-        <p>Биржа смен</p>
+        <p>Биржа слотов</p>
       </Link>
 
       <Link to="/Main/Salary" className='tile blocked' onClick={(event) => event.preventDefault()}> {/* Ссылка на страницу зарплаты */}
         <img src='/money.webp' alt=""/>
-        <p>Моя зарплата</p>
+        <p>Мои выплаты</p>
       </Link>
 
       <Link to="/Main/Training" className='tile blocked' onClick={(event) => event.preventDefault()}> {/* Ссылка на страницу обучения */}
@@ -25,7 +25,7 @@ const MenuTiles = () => {
         <p>Центр обучения</p>
       </Link>
 
-      <Link to="/Main/SalaryLevel" className='tile new'> {/* Ссылка на страницу обучения */}
+      <Link to="/Main/SalaryLevel" className='tile blocked'> {/* Ссылка на страницу обучения */}
         <img src='/morale.webp' alt=""/>
         <p>Уровень дохода</p>
       </Link>

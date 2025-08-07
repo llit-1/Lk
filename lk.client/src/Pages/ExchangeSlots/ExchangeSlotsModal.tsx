@@ -46,16 +46,16 @@ const ExchangeSlotsModal: React.FC<ExchangeSlotsModalProps> = ({ open, handleClo
         ) : isBooked === true ? (
           <div className='ExchangeSlots_Modal_Result'>
             <img src='/good.webp' alt="Success" />
-            <p>Смена успешно забронирована!</p>
+            <p>Слот успешно забронирован!</p>
           </div>
         ) : isBooked === false ? (
           <div className='ExchangeSlots_Modal_Result'>
             <img src='/bad.webp' alt="Canceled" />
-            <p>К сожалению, смена уже забронирована!</p>
+            <p>К сожалению, слот уже забронирован!</p>
           </div>
         ) : (
           <>
-            <div className='ExchangeSlots_Modal_Header'> Подтвердите взятие смены </div>
+            <div className='ExchangeSlots_Modal_Header'> Подтвердите взятие слота </div>
             {selectedSlot ? (
               <div className='ExchangeSlots_Modal_Data'>
                 <p>ТТ: {selectedSlot.locations.name}</p>
@@ -63,7 +63,7 @@ const ExchangeSlotsModal: React.FC<ExchangeSlotsModalProps> = ({ open, handleClo
                 <p>Дата: {selectedSlot.begin.split("T")[0]}</p>
                 <p>Время: {selectedSlot.begin.split("T")[1].slice(0, 5)} - {selectedSlot.end.split("T")[1].slice(0, 5)}</p>
                 <p className='ExchangeSlots_Modal_HandlerCost'>
-                  Стоимость смены: <span className='ExchangeSlots_Modal_p'>{
+                  Стоимость слота: <span className='ExchangeSlots_Modal_p'>{
                     ((new Date(selectedSlot.end).getTime() - new Date(selectedSlot.begin).getTime()) / (1000 * 60 * 60)) * 210
                   }</span> рублей
                 </p>

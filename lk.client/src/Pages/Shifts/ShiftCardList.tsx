@@ -108,8 +108,8 @@ const ShiftCardList : React.FC<ShiftCardListProps> = ({data, fetchData, fetchSta
     ))
   ) : (
     <div className='shift_noData'>
-      <span>На данный момент у вас нет ни одной активной смены, возьмите ее тут:</span>
-      <button onClick={() => navigate("/Main/Exchange")}>Биржа смен</button>
+      <span>На данный момент у вас нет ни одного активного слота, возьмите его тут:</span>
+      <button onClick={() => navigate("/Main/Exchange")}>Биржа слотов</button>
     </div>
   )}
 </>

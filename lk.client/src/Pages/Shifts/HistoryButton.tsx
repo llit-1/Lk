@@ -4,13 +4,13 @@ const HistoryButton = ({ isLoaded, onClick, color }: { isLoaded: boolean; onClic
   color == "#DEDEDE" ? (
     <div className="shiftList_buttonAdd_wrapper">
       <div className="shiftList_Card shiftList_Card_buttonAdd" style={{backgroundColor: color, color: "#676767"}} onClick={onClick}>
-        {!isLoaded ? "Показать завершенные смены" : <CircularProgress sx={{ color: "#F47920" }} size={18} />}
+        {!isLoaded ? "Показать завершенные слоты" : <CircularProgress sx={{ color: "#F47920" }} size={18} />}
       </div>
     </div>
   ) : (
     <div className="shiftList_buttonAdd_wrapper">
       <div className="shiftList_Card shiftList_Card_buttonAdd" style={{backgroundColor: color}} onClick={onClick}>
-        {!isLoaded ? "Показать текущие смены" : <CircularProgress sx={{ color: "white" }} size={18} />}
+        {!isLoaded ? "Показать текущие слоты" : <CircularProgress sx={{ color: "white" }} size={18} />}
       </div>
     </div>
   )

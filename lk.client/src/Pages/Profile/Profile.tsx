@@ -144,10 +144,10 @@ const Profile = () => {
           <TextField label="Имя" variant="outlined" disabled  value={user.name} sx={textFieldStyles}/>
           <TextField label="Отчество" variant="outlined" disabled  value={user.patronymic} sx={textFieldStyles}/>
           <TextField label="Дата рождения" variant="outlined" disabled  value={user.birthday} sx={textFieldStyles}/>
-          <TextField label="Должность" variant="outlined" disabled  value={user.jobTitle} sx={textFieldStyles}/>
-          <TextField label="Торговая точка" variant="outlined" disabled  value={user.location} sx={textFieldStyles}/>
-          <TextField label="Время смены" variant="outlined" disabled  value={user.scheduleStart + " - " + user.scheduleEnd} sx={textFieldStyles}/>
-          <TextField label="Юр. лицо" variant="outlined" disabled  value={user.entity} sx={textFieldStyles}/>
+          <TextField label="Основная предоставляемая услуга" variant="outlined" disabled  value={user.jobTitle} sx={textFieldStyles}/>
+          <TextField label="Основное место предоставления услуг" variant="outlined" disabled  value={user.location} sx={textFieldStyles}/>
+          <TextField label="Основное время слота" variant="outlined" disabled  value={user.scheduleStart + " - " + user.scheduleEnd} sx={textFieldStyles}/>
+          <TextField label="В сотрудничестве с" variant="outlined" disabled  value={user.entity} sx={textFieldStyles}/>
         </div>
 
         <div className='block'>
@@ -162,7 +162,7 @@ const Profile = () => {
 
           <div className='block3'>
 
-            <h1>Стаж</h1>
+            <h1 style={{textAlign: 'center'} }>Мы знакомы</h1>
 
             <div className="image-container" style={{ '--content': `"${years}"` } as React.CSSProperties}>
               <img src={gradeImg} alt=""/>

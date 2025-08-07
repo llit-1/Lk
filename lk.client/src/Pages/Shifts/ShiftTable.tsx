@@ -29,8 +29,8 @@ const ShiftTable: React.FC<ShiftTableProps> = ({data, fetchData, fetchStatistic}
 
         <div className="tableWrapper_header">
           <div className="tableWrapper_header_title" style={{ width: '10%', textAlign: 'center', fontWeight: 800 }}>Дата</div>
-          <div className="tableWrapper_header_title" style={{ width: '25%', textAlign: 'center', fontWeight: 800 }}>ТТ</div>
-          <div className="tableWrapper_header_title" style={{ width: '20%', textAlign: 'center', fontWeight: 800 }}>Должность</div>
+          <div className="tableWrapper_header_title" style={{ width: '25%', textAlign: 'center', fontWeight: 800 }}>Место предоставления услуги</div>
+          <div className="tableWrapper_header_title" style={{ width: '20%', textAlign: 'center', fontWeight: 800 }}>Предоставляемая услуга</div>
           <div className="tableWrapper_header_title" style={{ width: '15%', textAlign: 'center', fontWeight: 800 }}>Время</div>
           <div className="tableWrapper_header_title" style={{ width: '15%', textAlign: 'center', fontWeight: 800 }}>Стоимость</div>
           <div className="tableWrapper_header_title" style={{ width: '15%', textAlign: 'center', fontWeight: 800 }}>Статус</div>
@@ -100,8 +100,8 @@ const ShiftTable: React.FC<ShiftTableProps> = ({data, fetchData, fetchStatistic}
       </div>
     ) : (
       <div className='shift_noData'> 
-        <span>На данный момент у вас нет ни одной активной смены, возьмите ее тут:</span>
-        <button onClick={() => navigate("/Main/Exchange")}> Биржа смен </button>
+        <span>На данный момент у вас нет ни одного активного слота, возьмите его тут:</span>
+        <button onClick={() => navigate("/Main/Exchange")}> Биржа слотов </button>
       </div>
     )
   )

@@ -128,7 +128,15 @@ namespace lk.Server.Controllers
             if (user.LastPhoneCall.Value.Date == DateTime.Now.Date && user.PhoneCallAttempts > 3)
             {
                 return BadRequest(new { message = "Вы слишком часто запрашивали код, попробуйте позже" });
+            } 
+            
+            if(user.LastPhoneCall.Value.Date != DateTime.Now.Date)
+            {
+                user.PhoneCallAttempts = 0;
             }
+
+
+
             PhoneModel phoneModel = new();
             using (HttpClient client = new HttpClient())
             {
@@ -146,14 +154,12 @@ namespace lk.Server.Controllers
                     return BadRequest(ex);
                 }
             }
+
             if (phoneModel.status.ToLower() != "ok")
             {
                 return BadRequest(new { message = phoneModel.status });
             }
-            if (user.PhoneCallAttempts > 3)
-            {
-                user.PhoneCallAttempts = 0;
-            }
+
             user.PhoneCallAttempts++;
             user.LastPhoneCall = DateTime.Now;
             user.PhoneCode = phoneModel.code;

@@ -61,9 +61,9 @@ const ExchangeSlotCard: React.FC<ExchangeSlotCardProps> = ({ elem, fn }) => {
                 <p>ТТ: {elem.locations?.name || 'Неизвестно'}</p>
                 <div className='slot_title_extra'> <img src="/star-orange.png" alt="Logo" /> </div>
             </div>
-            <div className='slot_info'>Должность: {elem.jobTitles.name} </div>
+            <div className='slot_info'>Предоставляемая услуга: {elem.jobTitles.name} </div>
             <div className='slot_info slot_info_date'>
-                Дата и время смены: 
+                Дата и время слота: 
                 <p>
                     {
                         elem.begin ? 
@@ -82,7 +82,7 @@ const ExchangeSlotCard: React.FC<ExchangeSlotCardProps> = ({ elem, fn }) => {
 
                 <div className='slot_price'>
                     <p>
-                    ~ {parseFloat(getHours(elem.begin?.split("T")[1].slice(0, 5) || '00:00', elem.end?.split("T")[1].slice(0, 5) || '00:00')) * 210} рублей/смена
+                    ~ {parseFloat(getHours(elem.begin?.split("T")[1].slice(0, 5) || '00:00', elem.end?.split("T")[1].slice(0, 5) || '00:00')) * 210} рублей/слот
                     </p>
                 </div>
 
@@ -97,9 +97,9 @@ const ExchangeSlotCard: React.FC<ExchangeSlotCardProps> = ({ elem, fn }) => {
                 <p>ТТ: {elem.locations?.name || 'Неизвестно'}</p>
                 <div className='slot_title_extra'> <img src="/star-orange.png" alt="Logo" /> </div>
             </div>
-            <div className='slot_info'>Должность: {elem.jobTitles.name} </div>
+                  <div className='slot_info'>Предоставляемая услуга: {elem.jobTitles.name} </div>
             <div className='slot_info slot_info_date'>
-                Дата и время смены: 
+                Дата и время слота:
                 <p>
                     {elem.begin ? elem.begin.split("T")[0] : 'Не указана'} 
                 </p>
@@ -112,7 +112,7 @@ const ExchangeSlotCard: React.FC<ExchangeSlotCardProps> = ({ elem, fn }) => {
 
                 <div className='slot_price text-disabled'>
                     <p>
-                        {((new Date(elem.end).getTime() - new Date(elem.begin).getTime()) / (1000 * 60 * 60)) * 210} рублей/смена 
+                        {((new Date(elem.end).getTime() - new Date(elem.begin).getTime()) / (1000 * 60 * 60)) * 210} рублей/слот 
                     </p>
                 </div>
 
