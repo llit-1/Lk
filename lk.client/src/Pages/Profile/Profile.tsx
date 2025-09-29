@@ -147,7 +147,7 @@ const Profile = () => {
           <TextField label="Основная предоставляемая услуга" variant="outlined" disabled  value={user.jobTitle} sx={textFieldStyles}/>
           <TextField label="Основное место предоставления услуг" variant="outlined" disabled  value={user.location} sx={textFieldStyles}/>
           <TextField label="Основное время слота" variant="outlined" disabled  value={user.scheduleStart + " - " + user.scheduleEnd} sx={textFieldStyles}/>
-          <TextField label="В сотрудничестве с" variant="outlined" disabled  value={user.entity} sx={textFieldStyles}/>
+          {/*<TextField label="В сотрудничестве с" variant="outlined" disabled  value={user.entity} sx={textFieldStyles}/>*/}
         </div>
 
         <div className='block'>

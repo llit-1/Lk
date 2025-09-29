@@ -6,7 +6,7 @@ import { User } from "../interfaces/user";
 import { ExchangeSlot } from "../interfaces/ExchangeSlot";
 import { FutureSlots } from "../interfaces/FutureSlots";
 import { Statistic } from "../interfaces/Statistic";
-
+import {PhoneCallResponse, CheckCodeResponse} from "../interfaces/GetCodeFromCall"
 
 
 // Получаем хоста для дев режима
@@ -40,6 +40,43 @@ export const setPhoneCode = async (phoneDigits: string, dispatch: AppDispatch): 
     return null;
   }
 };
+
+
+// Функция для отправки запроса на сервер для подтверждения телефона
+export const getPhoneForCall = async (phoneDigits: string, dispatch: AppDispatch): Promise<PhoneCallResponse | null> => {
+  const host = getHost();
+  try {
+    const response = await axios.get(`${host}/api/Authorization/get-phone?phone=${phoneDigits}`);
+    if (response.status === 200) {
+      const data = response.data;
+      // Вернуть номер телефона для звонка
+      return data; // зависит от структуры ответа
+    } else {
+      dispatch(showNotification({ isGood: false, message: 'Введите корректный номер телефона!' }));
+      return null;
+    }
+  } catch (error) {
+    handleError(error, dispatch, 'Сервис временно недоступен, попробуйте позже');
+    return null;
+  }
+};
+
+
+export const сheckCallResult = async(check_id : string, dispatch: AppDispatch): Promise<CheckCodeResponse | null> => {
+  const host = getHost();
+  try {
+    const response = await axios.get(`${host}/api/Authorization/check-id?id=${check_id}`);
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      dispatch(showNotification({ isGood: false, message: 'Введите корректный номер телефона!' }));
+      return null;
+    }
+  } catch (error) {
+    handleError(error, dispatch, 'Сервис временно недоступен, попробуйте позже');
+    return null;
+  }
+}
 
 // Функция для отправки запроса на сервер для авторизации
 export const setLogin = async (
@@ -183,8 +220,6 @@ export const changePassword = async (
       }
     );
 
-    console.log("Response received:", response); // Лог ответа
-
     if (response.status === 200) {
       dispatch(
         showNotification({
@@ -194,7 +229,6 @@ export const changePassword = async (
       );
       return true;
     } else {
-      console.log("Unexpected response status:", response.status); // Лог при ошибке статуса
       return false;
     }
   } catch (error) {

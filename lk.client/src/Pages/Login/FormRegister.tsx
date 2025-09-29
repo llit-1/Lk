@@ -3,10 +3,12 @@ import "./Login.css"
 import GetPhone from "./GetPhone"
 import GetCode from "./GetCode"
 import GetPassword from "./GetPassword"
+import { GetCodeFromCall } from './GetCodeFromCall';
 
 // getCodeRequest - показывает разные формы
 // 0 - показать форму с вводом телефона
 // 1 - показать форму с вводом кода из СМС
+// 11 - показать телефон, на который надо позвонить
 // 2 - показать форму с вводом пароля
 
 
@@ -20,6 +22,8 @@ function FormRegister({ onSwitchForm }: { onSwitchForm: (x: number) => void }) {
         return (<GetPhone onSwitchForm={onSwitchForm} phone={phone} setPhone={setPhone} setGetCodeRequest = {setGetCodeRequest}/>)
       case(1):
         return (<GetCode onSwitchForm={onSwitchForm} setGetCodeRequest = {setGetCodeRequest}/>)
+      case(11):
+        return (<GetCodeFromCall setGetCodeRequest = {setGetCodeRequest}/>)
       case(2):
         return (<GetPassword onSwitchForm={onSwitchForm}/>)
   }

@@ -24,7 +24,9 @@ const GetPhone: React.FC<GetPhoneProps> = ({ onSwitchForm, phone, setPhone, setG
     setIsLoading(true);
     const phoneDigits = phone.replace(/\D/g, '').substring(1);
     if (phoneDigits.length !== 10) {
-       return dispatch(showNotification({ isGood: false, message: 'Введите корректный номер телефона!' }));
+      setIsLoading(false);
+      setButtonText("Отправить код")
+      return dispatch(showNotification({ isGood: false, message: 'Введите корректный номер телефона!' }));
     }
     dispatch(login({ token: "", phone: phoneDigits}));
 

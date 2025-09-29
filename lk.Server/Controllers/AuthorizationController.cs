@@ -52,7 +52,7 @@ namespace lk.Server.Controllers
         {
             string password = loginModel.Password;
             string phone = loginModel.Phone;
-            string code = loginModel.Code;
+            string? code = loginModel.Code;
             if (password == null || phone == null)
             {
                 return BadRequest(new { message = "Данные введены некорректно!" });
@@ -63,7 +63,7 @@ namespace lk.Server.Controllers
                 return BadRequest(new { message = "Пользователь не найден, обратитесь к руководителю!" });
             }
 
-            if (user.PhoneCode != code)
+            if (user.PhoneCode != code && code != null)
             {
                 return BadRequest(new { message = "Неверно введен код!" });
             }
@@ -167,6 +167,56 @@ namespace lk.Server.Controllers
             return Ok();
         }
 
+        [HttpGet("get-phone")]
+        public async Task<IActionResult> GetPhoneToCall(string phone)
+        {
+            PhoneCallResponse phoneCallResponse = new();
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    string url = $"https://sms.ru/callcheck/add?api_id=990DA73E-E2DA-6964-7933-7AF52DB2696D&json=1&phone=7{phone}";
+                    HttpResponseMessage response = await client.GetAsync(url);
+                    response.EnsureSuccessStatusCode();
+                    string json = await response.Content.ReadAsStringAsync();
+                    phoneCallResponse = JsonConvert.DeserializeObject<PhoneCallResponse>(json);
+
+                    // Вернуть данные клиенту, а не просто Ok()
+                    return Ok(phoneCallResponse);
+                }
+                catch (Exception ex)
+                {
+                    // Лучше логировать исключение и возвращать нормальное сообщение
+                    return BadRequest(new { error = "Ошибка сервиса SMS.ru" });
+                }
+            }
+        }
+
+        [HttpGet("check-id")]
+        public async Task<IActionResult> СheckCallResult(string id)
+        {
+            CheckCodeResponse phoneCallResponse = new();
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    string url = $"https://sms.ru/callcheck/status?api_id=990DA73E-E2DA-6964-7933-7AF52DB2696D&check_id={id}&json=1";
+                    HttpResponseMessage response = await client.GetAsync(url);
+                    response.EnsureSuccessStatusCode();
+                    string json = await response.Content.ReadAsStringAsync();
+                    phoneCallResponse = JsonConvert.DeserializeObject<CheckCodeResponse>(json);
+
+                    // Вернуть данные клиенту, а не просто Ok()
+                    return Ok(phoneCallResponse);
+                }
+                catch (Exception ex)
+                {
+                    // Лучше логировать исключение и возвращать нормальное сообщение
+                    return BadRequest(new { error = "Ошибка сервиса SMS.ru" });
+                }
+            }
+        }
+
         [HttpPost("check-phone-code")]
         public IActionResult CheckPhoneCode([FromBody] LoginModel loginModel)
         {
@@ -210,7 +260,7 @@ namespace lk.Server.Controllers
         {
             public string Phone { get; set; }
             public string Password { get; set; }
-            public string Code { get; set; }
+            public string? Code { get; set; }
 
         }
 
@@ -221,6 +271,25 @@ namespace lk.Server.Controllers
             public string call_id { get; set; }
             public decimal money { get; set; }
             public decimal balance { get; set; }
+        }
+
+        public class PhoneCallResponse
+        {
+            public string status { get; set; }
+            public int status_code { get; set; }
+            public string check_id { get; set; }
+            public string call_phone { get; set; }
+            public string call_phone_pretty { get; set; }
+            public string call_phone_html { get; set; }
+        }
+
+        public class CheckCodeResponse
+        {
+            public string status { get; set; }
+            public int status_code { get; set; }
+            public string check_status { get; set; }
+            public string check_status_text { get; set; }
+
         }
 
         public class ChangePasswordModel

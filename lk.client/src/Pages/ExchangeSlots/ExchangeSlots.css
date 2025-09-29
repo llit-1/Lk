@@ -311,13 +311,14 @@
 }
 
 button:disabled {
-    background-color: rgb(163 163 163 / 71%);
+    background-color: rgb(163 163 163 / 20%);
     cursor: not-allowed;
     transition: all 0.3s linear;
+    border-color: gray;
 }
 
 button:hover:disabled {
-    background-color: rgb(163 163 163 / 71%);
+    background-color: rgb(163 163 163 / 50%);
     cursor: not-allowed;
 }
 

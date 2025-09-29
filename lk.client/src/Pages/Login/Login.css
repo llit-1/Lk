@@ -59,3 +59,38 @@ img {
 header > .login_p {
     cursor: pointer;
 }
+
+.registerButtonWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    text-wrap: nowrap;
+    width: 100%;
+    max-width: 400px;
+    gap: 10px;
+}
+
+.registerButtonWrapper > button:disabled { 
+    border: none;
+}
+
+.textInfoCall {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Akrobat';
+    font-size: 18px;
+    text-wrap: balance;
+    color: #6d6d6d;
+}
+
+.linkCall {
+    text-decoration: none;
+    color: #ff8d00;
+    font-size: 26px;
+    padding: 15px 10px;
+    background: white;
+    border-radius: 8px;
+    margin: 10px 0px;
+}

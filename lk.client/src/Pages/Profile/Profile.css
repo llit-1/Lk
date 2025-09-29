@@ -27,6 +27,7 @@
 }
 
 .block1 {
+    justify-content: start;
     display: flex;
     flex-direction: column;
     gap: 12px;

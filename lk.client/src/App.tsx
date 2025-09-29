@@ -13,6 +13,7 @@ import { login } from './store/authSlice.ts';
 import { checkToken } from './Pages/Requests.tsx';
 import ExchangeSlots from "./Pages/ExchangeSlots/ExchangeSlots.tsx"
 import Shifts from "./Pages/Shifts/Shifts.tsx";
+// import Test from "./Pages/Test/Test.tsx";
 
 function App() {
     const storedToken = localStorage.getItem("authToken");
@@ -77,6 +78,7 @@ function App() {
                             <Route path="Profile" element={<Profile />} />
                             <Route path="Exchange" element={<ExchangeSlots />} />
                             <Route path="Shifts" element={<Shifts />} />
+                            {/* <Route path="Test" element={<Test />} /> */}
                         </Route>
                     </>
                 ) : (

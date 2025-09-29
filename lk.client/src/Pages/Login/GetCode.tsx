@@ -85,29 +85,43 @@ const GetCode: React.FC<GetCodeProps> = ({ onSwitchForm, setGetCodeRequest }) =>
         {isLoading && <CircularProgress sx={{ color: "orange" }} size={26} />}
       </Button>
 
-      <Button
-        variant="outlined"
-        className={"buttonInput"}
-        size="small"
-        disabled={buttonBlocked}
-        onClick={() => {
-          setTimerForCallAgain(60);
-          setButtonBlocked(true);
-          getCodeAgain();
-        }}
-        sx={{
-          color: "#6d6d6d", fontFamily: 'Akrobat',
-        }}
-      >
-        {timerForCallAgain === 0 ? "Запросить звонок повторно" : "Запросить звонок повторно " + timerForCallAgain } 
-      </Button>
+        <div className={"registerButtonWrapper"}>
+          <Button
+            variant="outlined"
+            className={"buttonInput"}
+            size="small"
+            disabled={buttonBlocked}
+            onClick={() => {
+              setTimerForCallAgain(60);
+              setButtonBlocked(true);
+              getCodeAgain();
+            }}
+            sx={{
+              color: "#6d6d6d", fontFamily: 'Akrobat', border: "none"
+            }}
+          >
+            Запросить звонок повторно
+          </Button>
+
+          <Button
+            variant="outlined"
+            className={"buttonInput"}
+            sx={{
+              color: "#6d6d6d", fontFamily: 'Akrobat', border: "none", backgroundColor: "none",
+            }}
+            size="small"
+            onClick={() => setGetCodeRequest(11)}
+          >
+            Позвонить самостоятельно
+          </Button>
+        </div>
 
       <Button
         className={"buttonInput"}
         size="small"
         onClick={() => onSwitchForm(0)}
         sx={{
-          color: "#6d6d6d", fontFamily: 'Akrobat',
+          color: "white", fontFamily: 'Akrobat', backgroundColor: "#F47920"
         }}
       >
         Уже зарегистрированы?
