@@ -35,10 +35,10 @@ const MenuTiles = () => {
         <p>Помощь</p>
       </Link>
 
-      {/* <Link to="/Main/Test" className='tile'>
-        <img src='/help.webp' alt=""/>
-        <p>Test</p>
-      </Link> */}
+      {/*<Link to="/Main/Test" className='tile'>*/}
+      {/*  <img src='/help.webp' alt=""/>*/}
+      {/*  <p>Test</p>*/}
+      {/*</Link>*/}
 
 
     </div>

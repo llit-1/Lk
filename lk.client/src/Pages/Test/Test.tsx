@@ -1,20 +1,7 @@
-import {  useEffect } from 'react'
+//import {  useEffect, useState } from 'react'
 
+//const Test = () => {
+//    return (<div style={{ display: 'flex', flexDirection: 'column' }}></div>)
+//}
 
-const Test = () => {
-
-
-    useEffect(() => {
-
-    }, [])
-    
-
-
-  return (
-    <div>
-
-    </div>
-  )
-}
-
-export default Test
+//export default Test;

@@ -7,4 +7,5 @@ export interface FutureSlots {
     beginTime: string;
     endTime: string;
     status: number | null;
+    totalSalary: number | null;
 }

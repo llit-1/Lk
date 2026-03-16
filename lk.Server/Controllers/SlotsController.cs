@@ -64,11 +64,13 @@ namespace lk.Server.Controllers
             {
                 DateTime begin = new DateTime(getUsersSheetsJson.Year.Value, getUsersSheetsJson.Month.Value, 1);
                 DateTime end = begin.AddMonths(1);
-                List<WorkingSlots> workingSlots = _rKNETDBContext.WorkingSlots.Include(c => c.Personalities)
-                                                                              .Include(c => c.Locations)
-                                                                              .Include(c => c.JobTitles)
-                                                                              .Where(c => c.Personalities.Phone == getUsersSheetsJson.Phone && c.Status != 1 && c.Begin >= begin && c.End < end)
-                                                                              .ToList();
+                // List<WorkingSlots> workingSlots = _rKNETDBContext.WorkingSlots.Include(c => c.Personalities)
+                //                                                               .Include(c => c.Locations)
+                //                                                               .Include(c => c.JobTitles)
+                //                                                               .Where(c => c.Personalities.Phone == getUsersSheetsJson.Phone && c.Status != 1 && c.Begin >= begin && c.End < end)
+                //                                                               .ToList();
+
+                List<WorkingSlots> workingSlots = new List<WorkingSlots>();
 
                 List<TimeSheets> timeSheets = _rKNETDBContext.TimeSheets.Include(c => c.Personalities)
                                                                         .Include(c => c.Location)
@@ -315,6 +317,7 @@ namespace lk.Server.Controllers
             public string BeginTime { get; set; }
             public string EndTime { get; set; }
             public int? Status { get; set; }
+            public decimal? TotalSalary { get; set; }
         }
 
         public class GetStatisticJsonResponse
@@ -349,6 +352,7 @@ namespace lk.Server.Controllers
                 usersSheet.Date = item.Begin.ToString("dd.MM.yyyy");
                 usersSheet.BeginTime = item.Begin.ToString("HH.mm");
                 usersSheet.EndTime = item.End.ToString("HH.mm");
+                usersSheet.TotalSalary = item.TotalSalary;
                 jsonResponse.Add(usersSheet);
             }
 
