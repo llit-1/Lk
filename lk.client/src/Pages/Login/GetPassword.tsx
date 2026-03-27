@@ -121,9 +121,10 @@ const GetPassword: React.FC<GetPasswordProps> = ({ onSwitchForm }) => {
         onClose={handleCloseSnackbar}
       />
 
-    {isAuth && <Navigate to="/Main/Tiles" />}
+    {isAuth && <Navigate to="/Messenger" />}
     </form>
   );
 };
 
 export default GetPassword;
+

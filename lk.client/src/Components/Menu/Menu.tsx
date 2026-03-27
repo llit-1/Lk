@@ -13,7 +13,7 @@ const Menu : React.FC<MenuProps> = ({isOpen, toggleDrawer}) => {
         <Drawer anchor="left" open={isOpen} onClose={toggleDrawer(false)}>
 
           <div className={styles['menu_wrapper']}>
-            <Link to="/Main/Tiles" className={styles['menu_list']}>Главная</Link>
+            <Link to="/Messenger" className={styles['menu_list']}>Главная</Link>
             <Link to="/Main/Shifts" className={styles['menu_list']}>Мои слоты</Link>
             <Link to="/Main/Exchange" className={styles['menu_list']}>Биржа слотов</Link>
             {/* <Link to="/Main/Salary" className={styles['menu_list']}>Моя зарплата</Link> */}

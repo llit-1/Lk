@@ -13,11 +13,19 @@ import { env } from 'process';
 //        : `${env.HOME}/.aspnet/https`;
 
 const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_HTTPS_PORT}` :
-    env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'https://localhost:7021';
+    env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'https://localhost:44300';
 
 export default defineConfig({
     plugins: [
         plugin(),
+        {
+            name: 'destroy-client-error-sockets',
+            configureServer(server) {
+                server.httpServer?.on('clientError', (_error, socket) => {
+                    socket.destroy();
+                });
+            },
+        },
         compression({
               threshold: 10240,
               algorithm: 'gzip',
@@ -35,7 +43,7 @@ export default defineConfig({
                 secure: false,
             },
         },
-        port: 7021,
+        port: 5173,
     }
 })
 

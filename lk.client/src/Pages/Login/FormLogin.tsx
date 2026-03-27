@@ -45,7 +45,7 @@ const FormLogin: React.FC<FormLoginProps> = ({ onSwitchForm }) => {
 
   // Перенаправление после успешного логина
   if (isAuth) {
-    return <Navigate to="/Main/Tiles" replace={true} />;
+    return <Navigate to="/Messenger" replace={true} />;
   }
 
   return (
@@ -105,3 +105,4 @@ const FormLogin: React.FC<FormLoginProps> = ({ onSwitchForm }) => {
 }
 
 export default FormLogin;
+

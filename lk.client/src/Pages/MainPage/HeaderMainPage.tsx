@@ -41,7 +41,7 @@ const HeaderMainPage: React.FC<HeaderMainPageProps> = ({ toggleDrawer }) => {
         <li className='header_li' onClick={toggleDrawer(true)}>
           <MenuOutlinedIcon style={{ color: 'white' }} />
         </li>
-        <li className='header_li_title' onClick={() => navigate("/Main/Tiles")}>
+        <li className='header_li_title' onClick={() => navigate("/Messenger")}>
           Личный Кабинет
         </li>
         <li
@@ -75,3 +75,4 @@ const HeaderMainPage: React.FC<HeaderMainPageProps> = ({ toggleDrawer }) => {
 };
 
 export default HeaderMainPage;
+

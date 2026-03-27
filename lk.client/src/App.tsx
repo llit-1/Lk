@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Login from "../src/Pages/Login/Login";
 import Main from "./Pages/MainPage/Main.tsx";
-import MenuTiles from "./Pages/MainPage/MenuTiles.tsx";
 import { IncomeLevelCards } from "./Pages/SalaryLevel/IncomeLevelCards.tsx";
 import Profile from "./Pages/Profile/Profile.tsx";
 import SnackBarCustom from "./Components/SnackBarCustom.tsx";
@@ -13,6 +12,7 @@ import { login } from './store/authSlice.ts';
 import { checkToken } from './Pages/Requests.tsx';
 import ExchangeSlots from "./Pages/ExchangeSlots/ExchangeSlots.tsx"
 import Shifts from "./Pages/Shifts/Shifts.tsx";
+import Messenger from "./Pages/Messenger/Messenger.tsx";
 //import Test from "./Pages/Test/Test.tsx";
 
 function App() {
@@ -71,9 +71,12 @@ function App() {
 
                 {isAuth ? (
                     <>
-                        <Route path="/" element={<Navigate to="/Main/Tiles" />} />
+                        <Route path="/" element={<Navigate to="/Messenger" />} />
+                        <Route path="/Messenger" element={<Main />}>
+                            <Route index element={<Messenger />} />
+                        </Route>
                         <Route path="/Main" element={<Main />}>
-                            <Route path="Tiles" element={<MenuTiles />} />
+                            <Route path="Tiles" element={<Navigate to="/Messenger" replace />} />
                             <Route path="SalaryLevel" element={<IncomeLevelCards />} />
                             <Route path="Profile" element={<Profile />} />
                             <Route path="Exchange" element={<ExchangeSlots />} />

@@ -1,30 +1,30 @@
-import HeaderMainPage from "./HeaderMainPage"
+//import HeaderMainPage from "./HeaderMainPage"
 import "./Menu.css"
-import Menu from "../../Components/Menu/Menu"
-import { useState, useCallback, useEffect } from 'react'
-import { Outlet, useLocation } from 'react-router-dom';
+//import Menu from "../../Components/Menu/Menu"
+//import { useState, useCallback, useEffect } from 'react'
+import { Outlet } from 'react-router-dom';
 
 
 function Main () {
-  const [isOpen, setIsOpen] = useState(false);
+  //const [isOpen, setIsOpen] = useState(false);
 
-    const toggleDrawer = useCallback((open: boolean) => () => {
-        setIsOpen(open);
-    }, []);
+  //  const toggleDrawer = useCallback((open: boolean) => () => {
+  //      setIsOpen(open);
+  //  }, []);
 
-    const location = useLocation();
+  //  const location = useLocation();
 
-    useEffect(() => setIsOpen(false), [location])
+  //  useEffect(() => setIsOpen(false), [location])
 
   return (
     <>
       
-      <HeaderMainPage toggleDrawer={toggleDrawer} />
-      <Menu isOpen={isOpen} toggleDrawer={toggleDrawer} />
+      {/* <HeaderMainPage toggleDrawer={toggleDrawer} />
+      <Menu isOpen={isOpen} toggleDrawer={toggleDrawer} /> */}
       <main>
         <Outlet />
       </main>
-      <footer>{import.meta.env.VITE_VERSION}</footer>  
+      {/* <footer>{import.meta.env.VITE_VERSION}</footer>   */}
     </>
       
       

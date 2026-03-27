@@ -37,10 +37,11 @@
 
 main {
     width: 100%;
-    min-height: calc(100dvh - 60px - 25px);
+    /* min-height: calc(100dvh - 60px - 25px); */
+    min-height: 100dvh;
     background-color: #EEEEEE;
-    margin-bottom: 25px;
-    margin-top: 60px;
+    /* margin-bottom: 25px;
+    margin-top: 60px; */
 }
 
 footer {
